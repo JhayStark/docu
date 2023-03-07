@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   return (
-    <div className="h-full bg-[#e8eaed]">
+    <div className="h-full">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       <div
         className={`${

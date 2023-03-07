@@ -1,4 +1,6 @@
 import { PureComponent } from "react";
+import { FaHandsHelping } from "react-icons/fa";
+import { BsPersonVideo3 } from "react-icons/bs";
 import {
   BarChart,
   Bar,
@@ -9,6 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import Link from "next/link";
 
 const data = [
   {
@@ -61,50 +64,62 @@ export default function Home() {
       <div className="flex flex-col items-center gap-3">
         <h1 className="text-5xl ">Hello, John Doe</h1>
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl">My Impact</h1>
-          <div className="flex gap-3">
+          <div className="flex w-full gap-3">
             <div className="flex flex-col gap-2">
-              <button className="w-40 p-2 text-white bg-blue-400 rounded">
+              <Link
+                href="/addIntervention"
+                className=" text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
                 Add Intervention
-              </button>
-              <div className="flex flex-col justify-around h-24 px-5 py-2 bg-white border-2 border-gray-300 rounded md:w-96">
-                <h1 className="text-lg">Interventions</h1>
-                <p className="text-3xl">1</p>
+              </Link>
+
+              <div className="flex flex-col justify-around h-24 px-5 py-2 bg-white rounded shadow-xl md:w-96">
+                <h1 className="text-lg font-medium">Interventions</h1>
+                <div className="flex flex-row items-center justify-between">
+                  <p className="text-3xl">1</p>
+                  <FaHandsHelping className="text-3xl text-blue-600" />
+                </div>
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <button className="w-40 p-2 text-white bg-blue-400 rounded">
+              <Link
+                href="/reviewMyDay"
+                className="text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+              >
                 Review My Day
-              </button>
-              <div className="flex flex-col justify-around h-24 px-5 py-2 bg-white border-2 border-gray-300 rounded md:w-96">
-                <h1 className="text-lg">Patients Impacted</h1>
-                <p className="text-3xl">1</p>
+              </Link>
+              <div className="flex flex-col justify-around h-24 px-5 py-2 bg-white rounded shadow-xl md:w-96">
+                <h1 className="text-lg font-medium">Patients Impacted</h1>
+                <div className="flex flex-row items-center justify-between">
+                  <p className="text-3xl ">1</p>
+                  <BsPersonVideo3 className="text-3xl text-blue-600" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="p-6 w-80 h-80 md:w-4/5">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              width={500}
-              height={300}
-              data={data}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="pv" fill="#8884d8" />
-              <Bar dataKey="uv" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
+          <div className="px-3 py-2 bg-white shadow-xl h-80 md:h-full md:w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                width={500}
+                height={300}
+                data={data}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="pv" fill="#8884d8" />
+                <Bar dataKey="uv" fill="#82ca9d" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </>

@@ -1,16 +1,23 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const AddIntervention = () => {
   return (
     <div className="flex flex-col justify-center w-3/5 gap-5 py-5 mx-auto ">
       <div className="flex justify-between gap-3">
-        <button className="bg-[#61BAE4] text-white hover:bg-[#087bab] p-2 rounded">
+        <Link
+          href="/myInterventions"
+          className="text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        >
           View Interventions
-        </button>
-        <button className="bg-[#61BAE4] text-white hover:bg-[#087bab] p-2 rounded">
+        </Link>
+        <Link
+          href="/"
+          className="text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        >
           Go Home
-        </button>
+        </Link>
       </div>
       <h1 className="text-xl font-semibold">
         Only 7-star Pharmacists Lead Interventions. Kudos!!
@@ -78,7 +85,7 @@ const AddIntervention = () => {
           <label htmlFor="care">Provide More Details</label>
           <textarea name="care" id="" className="p-2 rounded h-44"></textarea>
         </div>
-        <button className="bg-[#61BAE4] text-white hover:bg-[#087bab] p-2 rounded w-44">
+        <button className="text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
           Save & Continue
         </button>
       </form>

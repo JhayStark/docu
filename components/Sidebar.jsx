@@ -1,6 +1,30 @@
-import { useState } from "react";
+import Link from "next/link";
 import { HiHome } from "react-icons/hi";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+
+const sidebarData = [
+  {
+    icon: (
+      <HiHome className="w-6 h-6 mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+    ),
+    name: "Home",
+    link: "/",
+  },
+  {
+    icon: (
+      <HiHome className="w-6 h-6 mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+    ),
+    name: "My Interventions",
+    link: "/myInterventions",
+  },
+  {
+    icon: (
+      <HiHome className="w-6 h-6 mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
+    ),
+    name: "Profile",
+    link: "/profile",
+  },
+];
 const Sidebar = ({ setSidebarOpen, sidebarOpen }) => {
   return (
     <div>
@@ -15,33 +39,22 @@ const Sidebar = ({ setSidebarOpen, sidebarOpen }) => {
       <div
         className={`${
           sidebarOpen
-            ? `w-60 fixed bg-gray-50 dark:bg-gray-800 h-[100vh] flex flex-col justify-between `
+            ? `w-60 fixed bg-gray-50 dark:bg-gray-800 h-[100vh] flex flex-col justify-between z-50`
             : `hidden`
         }`}
       >
         <ul className="px-5 py-10">
-          <li className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg cursor-pointer dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-            <HiHome className="w-6 h-6 mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-            Home
-          </li>
-
-          <li className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg cursor-pointer dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-            <HiHome className="w-6 h-6 mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-            My Profile
-          </li>
-          <li className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg cursor-pointer dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-            <HiHome className="w-6 h-6 mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-            My Interventions
-          </li>
-
-          <li className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg cursor-pointer dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-            <HiHome className="w-6 h-6 mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-            My Patients
-          </li>
-          <li className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg cursor-pointer dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-            <HiHome className="w-6 h-6 mr-3 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" />
-            My Days
-          </li>
+          {sidebarData.map((data, index) => (
+            <Link href={data.link} key={index}>
+              <li
+                key={index}
+                className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg cursor-pointer dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                {data.icon}
+                {data.name}
+              </li>
+            </Link>
+          ))}
         </ul>
         <div className="flex flex-col justify-center gap-3 px-2 py-5 dark:text-gray-400">
           <h1>Welcome to DocuPharm</h1>
