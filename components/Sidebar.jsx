@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { HiHome } from "react-icons/hi";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
@@ -26,6 +27,20 @@ const sidebarData = [
   },
 ];
 const Sidebar = ({ setSidebarOpen, sidebarOpen }) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref, setSidebarOpen]);
   return (
     <div>
       <div
@@ -37,9 +52,10 @@ const Sidebar = ({ setSidebarOpen, sidebarOpen }) => {
         {setSidebarOpen ? <IoIosArrowForward /> : <IoIosArrowBack />}
       </div>
       <div
+        ref={ref}
         className={`${
           sidebarOpen
-            ? `w-60 fixed bg-gray-50 dark:bg-gray-800 h-[100vh] flex flex-col justify-between z-50`
+            ? `w-60 fixed bg-gray-50 dark:bg-gray-800 h-full md:h-[100vh] flex flex-col justify-between z-50`
             : `hidden`
         }`}
       >
