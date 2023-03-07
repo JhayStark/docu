@@ -59,9 +59,12 @@ const Sidebar = ({ setSidebarOpen, sidebarOpen }) => {
         <div className="flex flex-col justify-center gap-3 px-2 py-5 dark:text-gray-400">
           <h1>Welcome to DocuPharm</h1>
           <p>The #1 Impact Tracker for Pharmacists</p>
-          <button className="w-20 p-2 text-white bg-blue-400 rounded ">
-            LOGOUT
-          </button>
+          <Link
+            href="/auth/login"
+            className="text-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          >
+            Logout
+          </Link>
         </div>
       </div>
     </div>

@@ -97,7 +97,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="px-3 py-2 bg-white shadow-xl h-80 md:h-full md:w-full">
+          <div className="px-3 py-2 bg-white shadow-xl h-80 md:h-96 md:w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 width={500}

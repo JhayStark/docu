@@ -25,33 +25,34 @@ const Register = () => {
   } = useForm({ defaultValues });
 
   const onSubmit = async (data) => {
-    console.log(data.pasword);
-    console.log(confirmPassword);
-    try {
-      if (data.password !== confirmPassword) {
-        throw new Error("Passwords do not match");
-      }
-      const result = await axios.post(
-        "http://localhost:3000/api/users/signup",
-        { ...data }
-      );
-      if (result.error) {
-        return null;
-      } else {
-        router.push("/auth/login");
-      }
-      clearErrors();
-      reset();
-    } catch (error) {
-      console.log(error);
-    }
+    // console.log(data.pasword);
+    // console.log(confirmPassword);
+    // try {
+    //   if (data.password !== confirmPassword) {
+    //     throw new Error("Passwords do not match");
+    //   }
+    //   const result = await axios.post(
+    //     "http://localhost:3000/api/users/signup",
+    //     { ...data }
+    //   );
+    //   if (result.error) {
+    //     return null;
+    //   } else {
+    //     router.push("/auth/login");
+    //   }
+    //   clearErrors();
+    //   reset();
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    console.log(data);
   };
 
   return (
     <>
       <div className="flex flex-row justify-center h-full overflow-hidden ">
         <img
-          src="/images/intervention-img.png"
+          src="https://res.cloudinary.com/jhay/image/upload/v1678194677/docu-pharma/intervention-img_d8pphl.png"
           className="w-[60vw] object-cover h-screen opacity-80 hidden lg:block"
         />
         <div className="lg:w-[40vw]">

@@ -24,30 +24,31 @@ const Login = () => {
   } = useForm({ defaultValues });
 
   const onSubmit = async (data) => {
-    try {
-      const result = await axios.post("/api/users/login", { ...data });
-      console.log(result.response);
+    // try {
+    //   const result = await axios.post("/api/users/login", { ...data });
+    //   console.log(result.response);
 
-      if (!result.data.success) {
-        setLoginError("Incorrect username or password");
-        console.log(loginError);
-      } else {
-        const { firstName, email, token } = result.data.data;
-        login(firstName, token);
+    //   if (!result.data.success) {
+    //     setLoginError("Incorrect username or password");
+    //     console.log(loginError);
+    //   } else {
+    //     const { firstName, email, token } = result.data.data;
+    //     login(firstName, token);
 
-        router.push("/user/");
-      }
-      clearErrors();
-      reset();
-    } catch (error) {
-      console.log(error);
-    }
+    //     router.push("/user/");
+    //   }
+    //   clearErrors();
+    //   reset();
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    console.log(data);
   };
   return (
     <>
       <div className="flex flex-row justify-center overflow-hidden w-full h-[100vh] ">
         <img
-          src="/images/intervention-img.png"
+          src="https://res.cloudinary.com/jhay/image/upload/v1678194677/docu-pharma/intervention-img_d8pphl.png"
           className="w-[65vw] object-cover h-full hidden lg:block opacity-80"
         />
         <div className="lg:w-[35vw]  h-full">

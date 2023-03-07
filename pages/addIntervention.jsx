@@ -23,8 +23,8 @@ const AddIntervention = () => {
         Only 7-star Pharmacists Lead Interventions. Kudos!!
       </h1>
       <Image
-        src="/images/intervention-img.png"
-        alt=""
+        src="https://res.cloudinary.com/jhay/image/upload/v1678194677/docu-pharma/intervention-img_d8pphl.png"
+        alt="logo"
         width={800}
         height={600}
       />
