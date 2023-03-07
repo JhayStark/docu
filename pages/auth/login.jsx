@@ -42,6 +42,7 @@ const Login = () => {
     // } catch (error) {
     //   console.log(error);
     // }
+    router.push("/");
     console.log(data);
   };
   return (
