@@ -14,6 +14,11 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import dynamic from "next/dynamic";
+
+const ComponentWithNoSSR = dynamic(() => import("../../components/DataTable"), {
+  ssr: false,
+});
 
 const data = [
   {
@@ -227,7 +232,7 @@ const Index = () => {
           </ResponsiveContainer>
         </section>
         <section className="mt-5">
-          <DataTableComponent columns={columns} dataSource={dataSource} />
+          <ComponentWithNoSSR columns={columns} dataSource={dataSource} />
         </section>
         <section className="">
           <div className="flex flex-row justify-between">

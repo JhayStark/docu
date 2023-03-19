@@ -65,7 +65,7 @@ const DataTableComponent = ({ columns, dataSource }) => {
       subHeaderComponent={subHeaderComponentMemo}
       selectableRows={false}
       persistTableHead
-      onRowClicked={handleRowClicked}
+      noDataComponent
       // onRowClicked={handleRowClicked}
 
       customStyles={{
