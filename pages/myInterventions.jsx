@@ -979,7 +979,7 @@ const MyInterventions = () => {
       sortable: true,
     },
     {
-      name: "Interventions(s)",
+      name: "Interventions",
       selector: (row) => row.interventions,
       sortable: true,
     },

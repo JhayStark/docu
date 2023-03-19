@@ -6,9 +6,11 @@ import { useRouter } from "next/router";
 export default function App({ Component, pageProps }) {
   const { pathname } = useRouter();
   const checkUserPath = pathname.includes("/auth");
+  const checkMobilePath = pathname.includes("/mobile");
+
   return (
     <AuthProvider>
-      {!checkUserPath ? (
+      {!checkUserPath && !checkMobilePath ? (
         <Layout>
           <Component {...pageProps} />
         </Layout>
