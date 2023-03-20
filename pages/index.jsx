@@ -1,4 +1,3 @@
-import { PureComponent } from "react";
 import { FaHandsHelping } from "react-icons/fa";
 import { BsPersonVideo3 } from "react-icons/bs";
 import {

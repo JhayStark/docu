@@ -1,93 +1,87 @@
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useMemo, useState } from "react";
+import DataTable from "react-data-table-component";
+import { MdOutlineClear } from "react-icons/md";
 
-const DataTable = () => {
+import dynamic from "next/dynamic";
+
+const FilterComponent = ({ filterText, onFilter, onClear }) => (
+  <div className="flex flex-row h-8 bg-transparent !important ">
+    <input
+      id="search"
+      type="text"
+      placeholder="Filter By Name"
+      value={filterText}
+      onChange={onFilter}
+      className="p-2 rounded outline-none"
+    />
+    <button onClick={onClear} className="bg-[#800020] p-2 text-white h-full">
+      <MdOutlineClear />
+    </button>
+  </div>
+);
+
+const DataTableComponent = ({ columns, dataSource }) => {
+  const router = useRouter();
+
+  const handleRowClicked = (row) => {
+    // Navigate to the details page with the clicked row's ID as a query parameter
+    router.push(`/user/${row.id}`);
+  };
+
+  const [filterText, setFilterText] = useState("");
+  const [data, setData] = useState(dataSource);
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
+  const filteredItems = data.filter(
+    (item) =>
+      item.patientName &&
+      item.patientName.toLowerCase().includes(filterText.toLowerCase())
+  );
+
+  const subHeaderComponentMemo = useMemo(() => {
+    const handleClear = () => {
+      if (filterText) {
+        setResetPaginationToggle(!resetPaginationToggle);
+        setFilterText("");
+      }
+    };
+
+    return (
+      <FilterComponent
+        onFilter={(e) => setFilterText(e.target.value)}
+        onClear={handleClear}
+        filterText={filterText}
+      />
+    );
+  }, [filterText, resetPaginationToggle]);
+
   return (
-    <div className="overflow-x-auto shadow-md sm:rounded-lg">
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" className="p-4">
-              <div className="flex items-center">
-                <input
-                  id="checkbox-all-search"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <p for="checkbox-all-search" className="pl-2">
-                  Recoreded Date
-                </p>
-              </div>
-            </th>
-            <th scope="col" className="px-6 py-3 w-28">
-              Patient Name
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Intervention ID
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Pharmaceutical Care
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Interventions(s)
-            </th>
-            <th scope="col" className="px-6 py-3">
-              Company
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="bg-white border-b cursor-pointer dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <td className="p-4 ">
-              <div className="flex items-center w-28">
-                <input
-                  id="checkbox-table-search-1"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <p for="checkbox-table-search-1" className="pl-2">
-                  2023-02-26
-                </p>
-              </div>
-            </td>
-            <th
-              scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              Joel Edem Amenuvor
-            </th>
-            <td className="px-6 py-4">1</td>
-            <td className="px-6 py-4">Ineffective Medication</td>
-            <td className="px-6 py-4">Switch dosage form</td>
-            <td className="px-6 py-4">Trober</td>
-          </tr>
-          <tr className="bg-white border-b cursor-pointer dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <td className="p-4 ">
-              <div className="flex items-center w-28">
-                <input
-                  id="checkbox-table-search-1"
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-                <p for="checkbox-table-search-1" className="pl-2">
-                  2023-02-26
-                </p>
-              </div>
-            </td>
-            <th
-              scope="row"
-              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              Joel Edem Amenuvor
-            </th>
-            <td className="px-6 py-4">1</td>
-            <td className="px-6 py-4">Ineffective Medication</td>
-            <td className="px-6 py-4">Switch dosage form</td>
-            <td className="px-6 py-4">Trober</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <DataTable
+      columns={columns}
+      data={filteredItems}
+      pagination
+      paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+      subHeader
+      subHeaderComponent={subHeaderComponentMemo}
+      selectableRows={false}
+      persistTableHead
+      noDataComponent
+      // onRowClicked={handleRowClicked}
+
+      customStyles={{
+        headCells: {
+          style: {
+            justifyContent: "center",
+          },
+        },
+        cells: {
+          style: {
+            justifyContent: "center",
+          },
+        },
+      }}
+    />
   );
 };
 
-export default DataTable;
+export default DataTableComponent;
