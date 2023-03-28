@@ -9,7 +9,7 @@ const Index = () => {
     <div className="font-sans">
       <div
         id="pageContainer"
-        className="flex flex-col gap-5 p-3 pt-11 lg:px-48 "
+        className="flex flex-col gap-5 p-3 pb-20 pt-11 lg:px-48 "
       >
         <Link href={"/mobile/interventions/new"}>
           <div className="flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] self-end ">
