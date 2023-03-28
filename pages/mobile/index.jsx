@@ -167,8 +167,8 @@ const dataSource = [
 
 const Index = () => {
   return (
-    <div>
-      <div id="pageContainer" className="flex flex-col gap-5 p-3 lg:px-36 ">
+    <div className="font-sans">
+      <div id="pageContainer" className="flex flex-col gap-5 p-3 lg:px-48 ">
         <section
           id="topSection"
           className="flex flex-row items-center justify-between "
@@ -186,14 +186,14 @@ const Index = () => {
           <div className="flex flex-row gap-2 rounded-md bg-[#0146E9] w-[51%] md:w-[48%] md:justify-evenly py-5 px-2  items-center">
             <PatientsIcon />
             <div className="flex flex-col items-center">
-              <h2 className="md:text-xl">Patients Impacted</h2>
+              <h2 className="text-sm md:text-xl">Patients Impacted</h2>
               <h2 className="font-bold md:text-xl">25</h2>
             </div>
           </div>
           <div className="flex flex-row gap-3 rounded-md bg-[#FF6332] w-[47%] md:w-[48%] md:justify-evenly py-5 px-2  items-center">
             <PatientsIcon />
             <div className="flex flex-col items-center">
-              <h2 className="md:text-xl">Interventions</h2>
+              <h2 className="text-sm md:text-xl">Interventions</h2>
               <h2 className="font-bold md:text-xl">25</h2>
             </div>
           </div>
@@ -237,7 +237,7 @@ const Index = () => {
         <section className="">
           <div className="flex flex-row justify-between">
             <h2 className="font-bold">Reviews</h2>
-            <div className="flex flex-row items-center gap-2">
+            <div className="flex flex-row items-center gap-2 text-[#0146E9]">
               <AddIntervention />
               <h2>Add review</h2>
             </div>
