@@ -4,13 +4,13 @@ import { RiHome8Line, RiShieldUserLine } from "react-icons/ri";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 const Register = () => {
   const router = useRouter();
   const [confirmPassword, setConfirmPassword] = useState("");
   const defaultValues = {
     firstName: "",
-    middleName: "",
     lastName: "",
     email: "",
     phoneNumber: "",
@@ -24,47 +24,26 @@ const Register = () => {
     formState: { errors },
   } = useForm({ defaultValues });
 
-  const onSubmit = async (data) => {
-    // console.log(data.pasword);
-    // console.log(confirmPassword);
-    // try {
-    //   if (data.password !== confirmPassword) {
-    //     throw new Error("Passwords do not match");
-    //   }
-    //   const result = await axios.post(
-    //     "http://localhost:3000/api/users/signup",
-    //     { ...data }
-    //   );
-    //   if (result.error) {
-    //     return null;
-    //   } else {
-    //     router.push("/auth/login");
-    //   }
-    //   clearErrors();
-    //   reset();
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    console.log(data);
-  };
-
   return (
     <>
       <div className="flex flex-row justify-center h-full overflow-hidden ">
-        <img
-          src="https://res.cloudinary.com/jhay/image/upload/v1678194677/docu-pharma/intervention-img_d8pphl.png"
-          className="w-[60vw] object-cover h-screen opacity-80 hidden lg:block"
-        />
+        <div className="w-[60vw] h-screen opacity-80 hidden lg:block relative">
+          <Image
+            src="https://res.cloudinary.com/jhay/image/upload/v1678194677/docu-pharma/intervention-img_d8pphl.png"
+            fill={true}
+            alt="Patient and Pharmacist"
+          />
+        </div>
         <div className="lg:w-[40vw]">
           <div className="flex flex-col items-center justify-center w-full h-full ">
             <form
-              onSubmit={handleSubmit(async (data) => onSubmit(data))}
-              className="flex flex-col items-center justify-center w-full gap-5 p-2"
+              onSubmit={handleSubmit(async (data) => {})}
+              className="flex flex-col items-center justify-center w-full h-[100vh] lg:h-full gap-5 lg:gap-10 p-2 m-auto"
             >
               <h1 className="text-xl font-semibold text-gray-700 ">
                 Create an account
               </h1>
-              <div className="grid grid-cols-2 grid-rows-6 gap-4">
+              <div className="flex flex-col gap-4">
                 <input
                   type="text"
                   placeholder={`${
@@ -80,21 +59,7 @@ const Register = () => {
                     required: "Enter your first name",
                   })}
                 />
-                <input
-                  type="text"
-                  placeholder={`${
-                    errors.middleName
-                      ? `${errors.middleName?.message}`
-                      : `Middle name`
-                  }`}
-                  className={`p-2 bg-transparent border-b-2 outline-none w-60 placeholder:text-slate-600 ${
-                    errors.middleName &&
-                    `placeholder:text-red-500 border-red-500`
-                  }`}
-                  {...register("middleName", {
-                    required: "Enter your middle name",
-                  })}
-                />
+
                 <input
                   type="text"
                   placeholder={`${

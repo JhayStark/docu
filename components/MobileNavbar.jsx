@@ -9,7 +9,7 @@ const MobileNavbar = () => {
   return (
     <nav className="fixed bottom-0 flex w-[100%] flex-row  text-[#0146E9] justify-between px-6 md:px-20 py-5 lg:py-3 shadow-md bg-white">
       <Link
-        href={"/mobile/"}
+        href={"/"}
         className="flex flex-col items-center justify-center cursor-pointer"
       >
         <Home />
@@ -17,21 +17,21 @@ const MobileNavbar = () => {
       </Link>
 
       <Link
-        href={"/mobile/interventions/"}
+        href={"/interventions/"}
         className="flex flex-col items-center justify-center cursor-pointer"
       >
         <CategoryIcon />
         <h1>Interventions</h1>
       </Link>
       <Link
-        href={"/mobile/profile"}
+        href={"/profile"}
         className="flex flex-col items-center justify-center cursor-pointer"
       >
         <ProfileIcon />
         <h1>Profile</h1>
       </Link>
       <Link
-        href={"/mobile/"}
+        href={"/"}
         className="flex flex-col items-center justify-center cursor-pointer"
       >
         <LogoutIcon />

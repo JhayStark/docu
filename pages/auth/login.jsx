@@ -1,10 +1,9 @@
 import Link from "next/link";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { RiShieldUserLine, RiHome8Line } from "react-icons/ri";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { AuthContext } from "@/context/AuthProvider";
+import axios from "axios";
 
 const Login = () => {
   const [loginError, setLoginError] = useState("");
@@ -23,28 +22,6 @@ const Login = () => {
     formState: { errors },
   } = useForm({ defaultValues });
 
-  const onSubmit = async (data) => {
-    // try {
-    //   const result = await axios.post("/api/users/login", { ...data });
-    //   console.log(result.response);
-
-    //   if (!result.data.success) {
-    //     setLoginError("Incorrect username or password");
-    //     console.log(loginError);
-    //   } else {
-    //     const { firstName, email, token } = result.data.data;
-    //     login(firstName, token);
-
-    //     router.push("/user/");
-    //   }
-    //   clearErrors();
-    //   reset();
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    router.push("/");
-    console.log(data);
-  };
   return (
     <>
       <div className="flex flex-row justify-center overflow-hidden w-full h-[100vh] ">
@@ -57,7 +34,7 @@ const Login = () => {
             <img src="/image/logo-red-1.png" alt="" className="mb-5 w-36" />
 
             <form
-              onSubmit={handleSubmit(async (data) => onSubmit(data))}
+              onSubmit={handleSubmit(async (data) => {})}
               className="flex flex-col items-center justify-center gap-5 p-2 "
             >
               <h1 className="text-xl font-semibold text-center text-gray-700">
