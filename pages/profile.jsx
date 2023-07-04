@@ -1,95 +1,71 @@
-import React from "react";
+import { useState, useContext } from 'react';
+import MobileNavbar from '@/components/MobileNavbar';
+import { AuthContext } from '@/context/AuthProvider';
 
 const Profile = () => {
+  const [role, setRole] = useState('');
+  const { userData } = useContext(AuthContext);
   return (
-    <div className="flex flex-col items-center justify-center">
-      <div className="w-[50vw]">
-        <h1 className="mb-5 text-lg font-bold">Profile Details</h1>
-
-        <form action="" className="p-5 border-2 border-[#d8dadd] rounded ">
-          <div className="flex flex-col gap-2 px-2 py-5">
-            <label
-              htmlFor="firstName"
-              className="text-lg font-medium text-gray-600"
-            >
-              First Name
-            </label>
+    <div>
+      <div className='px-5 pb-20 lg:px-48'>
+        <div className='flex flex-row items-center pt-16'>
+          <div className='w-12 h-12 mr-2 bg-red-500 bg-center bg-cover rounded-full' />
+          <p>Pharm. {`${userData.firstName} ${userData.lastName}`}</p>
+        </div>
+        <p className='py-3'>User Profile</p>
+        <div className='flex flex-col gap-7'>
+          <input
+            type='text'
+            className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
+            placeholder='Email'
+          />
+          <input
+            type='text'
+            className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
+            placeholder='Phone Number'
+          />
+          <input
+            type='text'
+            className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
+            placeholder='Gender'
+          />
+          <input
+            type='text'
+            className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
+            placeholder='Place of work'
+          />
+          <select
+            name=''
+            id=''
+            className='bg-inherit border-b-2 border-[#A29E95] px-2 py-2 focus:outline-none'
+            onChange={e => setRole(e.target.value)}
+          >
+            <option value=''>Select your role</option>
+            <option value='student'>Student Intern</option>
+            <option value='student'>Intern Pharmacist</option>
+            <option value='pharmacist'>Pharmacist (B. Pharm)</option>
+            <option value='pharmacist'>Pharmacist (Pharm D)</option>
+          </select>
+          {role === 'pharmacist' && (
             <input
-              type="text"
-              name="firstName"
-              className="p-2 w-[95%] bg-[#f0f2f6]"
+              type='text'
+              className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
+              placeholder='Registration Number (PA/HPA)'
             />
-          </div>
-          <div className="flex flex-col gap-2 px-2 py-5">
-            <label
-              htmlFor="lastName"
-              className="text-lg font-medium text-gray-600"
-            >
-              Last Name
-            </label>
+          )}
+          {role === 'student' && (
             <input
-              type="text"
-              name="lastName"
-              className="p-2 w-[95%] bg-[#f0f2f6]"
+              type='text'
+              className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
+              placeholder='Student Number'
             />
-          </div>
-          <div className="flex flex-col gap-2 px-2 py-5">
-            <label
-              htmlFor="gender"
-              className="text-lg font-medium text-gray-600"
-            >
-              Gender
-            </label>
-            <select name="" id="" className="p-2 w-[95%] bg-[#f0f2f6]">
-              <option value="Male">M</option>
-              <option value="Female">F</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-2 px-2 py-5">
-            <label
-              htmlFor="status"
-              className="text-lg font-medium text-gray-600"
-            >
-              Status
-            </label>
-            <select name="" id="" className="p-2 w-[95%] bg-[#f0f2f6]">
-              <option value="Male">M</option>
-              <option value="Female">F</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-2 px-2 py-5">
-            <label
-              htmlFor="status"
-              className="text-lg font-medium text-gray-600 "
-            >
-              Registration Number (PA/HPA)
-            </label>
-            <select name="" id="" className="p-2 w-[95%] bg-[#f0f2f6]">
-              <option value="Male">M</option>
-              <option value="Female">F</option>
-            </select>
-          </div>
-          <div className="mt-32">
-            <h1 className="pb-16 text-lg font-medium text-gray-600 border-b-2">
-              Add place(s) of work
-            </h1>
-            <div className="flex flex-row justify-between px-1 pt-5">
-              <div className="flex flex-col w-full gap-2 ">
-                <label htmlFor="" className="text-lg font-medium text-gray-600">
-                  Company
-                </label>
-                <input type="text" className="w-[80%] p-2 bg-[#f0f2f6]" />
-              </div>
-              <div className="flex flex-col w-full gap-2 ">
-                <label htmlFor="" className="text-lg font-medium text-gray-600">
-                  Town
-                </label>
-                <input type="text" className="w-[80%] p-2 bg-[#f0f2f6]" />
-              </div>
-            </div>
-          </div>
-        </form>
+          )}
+          <button className='mt-10 px-36 py-4 bg-inherit border-2 self-center border-[#A29E95]'>
+            Save
+          </button>
+        </div>
       </div>
+      <MobileNavbar />
     </div>
   );
 };
