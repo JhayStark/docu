@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
       const foundUser = JSON.parse(loggedInUser);
       setUserData(foundUser);
       setIsAuthenticated(true);
-      console.log(userData);
     }
     setIntializing(false);
   }, []);
@@ -32,6 +31,7 @@ export const AuthProvider = ({ children }) => {
           lastName: userInfo.last_name,
           isNewUser: userInfo.is_new_user,
           id: userInfo.id,
+          email: userInfo.email,
         };
         setIsAuthenticated(true);
         setUserData(storedUserData);

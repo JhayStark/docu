@@ -28,7 +28,10 @@ const Login = () => {
         login(res.data, data.email);
         clearErrors();
       })
-      .catch(() => setLoginError('Enter valid username and password'));
+      .catch(err => {
+        console.error(err);
+        setLoginError('Enter valid username and password');
+      });
   };
 
   return (
