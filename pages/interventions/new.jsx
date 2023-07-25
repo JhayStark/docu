@@ -1,79 +1,241 @@
-import MobileNavbar from "@/components/MobileNavbar";
-import AddIntervention from "@/public/svgs/AddInterventionIcon";
-import React from "react";
+import { useState } from 'react';
+import Layout from '@/components/Layout';
+import AddIntervention from '@/public/svgs/AddInterventionIcon';
+import api from '@/utils/axiosInstance';
+import { useForm } from 'react-hook-form';
+
+const interventions = {
+  'Ineffective medicine': {
+    reason: [
+      'A medical condition requires combination therapy (synergistic or additive)',
+      'The medicine is not the most effective for the management of the patient',
+      'The medicine is generally not effective/substandard',
+      'The condition is resistant to the medication',
+      'The dosage form is inappropriate',
+    ],
+    solution: ['Switch Medicine', 'Switch Dosage form'],
+  },
+
+  'Drug therapy is not required': {
+    reason: [
+      'No indication for prescribed drug',
+      'Duplicated therapy (Multiple drugs of similar MoA with no known additional benefits)',
+      'Addiction/Drug is being used for recreational purposes',
+      'Drugs can be avoided without change in outcome',
+      'The non-pharmacological approach will still work',
+    ],
+    solution: [
+      'Discontinue Medicine',
+      'Triturate dose down',
+      'Refer to specialist/ Counselling (Checkbox)',
+    ],
+  },
+  'The patient needs additional therapy': {
+    reason: ['Untreated indications', 'Prophylactic therapy'],
+    solution: [
+      'Add identified indication and new therapy',
+      'Add prophylactic therapy',
+    ],
+  },
+  'Dosage too low (Underdose)': {
+    reason: [
+      'The dose is too low to give the desired outcome',
+      'The dosing frequency (dosage regimen) is too long',
+      'The duration of therapy is too short',
+    ],
+    solution: ['Adjust Dose/Frequency/Duration'],
+  },
+  'Dosage too high (Overdose)': {
+    reason: [
+      'The dose is too high for the patient',
+      'The dosing frequency is too short',
+      'The regimen was administered or changed too rapidly',
+      'The duration of therapy is too long',
+      'The dose was administered too rapidly',
+    ],
+    solution: ['Adjust Dose/Frequency/Duration'],
+  },
+  'Safety/ADR issues': {
+    reason: [
+      'Absolute contraindication is present',
+      'The medication causes an undesirable reaction not related to the dose',
+      'A safer medicine is needed due to patient risk factors',
+      'A medicine interaction causes an undesirable reaction',
+      'A medicine interaction causes a toxic reaction to the medication',
+    ],
+    solution: [
+      'Discontinue Medicine and Monitor Patient',
+      'Monitor Patient',
+      'Discontinue and Switch Medicine',
+      'Report ADR to FDA/ Counselling',
+    ],
+  },
+  'Adherence issues': {
+    reason: [
+      'The patient did not understand the advice given',
+      'Non-availability of the medicine',
+      "Medicine worsens the patient's other medical conditions (drug-disease interaction)",
+      'Treatment is complex/cumbersome',
+      'Undesirable side effects',
+      'The dosage form is not appropriate for the patient',
+      'The patient prefers not to take the drug',
+      'The patient forgets to take the medicine',
+      'The medicine is too expensive',
+      'The patient cannot swallow or self-administer the medication properly',
+      'Limited accessibility to the medicine',
+      'Knowledge/Awareness gap on disease condition.',
+    ],
+    solution: [
+      'Counselling',
+      'Find medicine for the patient',
+      'Simplify Treatment (Switch to combination therapy/Switch drug formulation for pharmacokinetic advantage)',
+      'Switch Medicine',
+      'Switch Dosage Form',
+      'Switch to more Affordable Medicine',
+    ],
+  },
+};
 
 const New = () => {
+  const [diagnosis, setDiagnosis] = useState('');
+  const defaultValues = {
+    patientName: '',
+    interventionLocation: '',
+    interventionDiagnosis: '',
+    interventionReason: '',
+    interventionSolution: '',
+    moreDetails: '',
+    medicationInvolved: '',
+  };
+
+  const {
+    handleSubmit,
+    register,
+    clearErrors,
+    reset,
+    formState: { errors },
+  } = useForm(defaultValues);
+
+  const handleDiagnosisChange = e => {
+    setDiagnosis(e.target.value);
+  };
+
   return (
-    <div>
-      <div className="px-5 pt-12 pb-28 lg:px-48">
-        <div className="flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] self-start mb-11 ">
-          <AddIntervention />
-          <p>Add Intervention</p>
-        </div>{" "}
-        <div className="flex flex-row items-center">
-          <div className="w-12 h-12 mr-2 bg-red-500 bg-center bg-cover rounded-full" />
-          <p>Male</p>
-        </div>
-        <div className="flex flex-col gap-3 pt-8">
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              id="patientName"
-              name="patientName"
-              className="px-5 py-3 focus:outline-none bg-[#F0F0F0]"
-              placeholder="Patient Name"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              id="interventionLocation"
-              name="interventionLocation"
-              className="px-5 py-3 focus:outline-none bg-[#F0F0F0]"
-              placeholder="Intervention Location"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              id="whenInterventionWasRecorded"
-              name="whenInterventionWasRecorded"
-              className="px-5 py-3 focus:outline-none bg-[#F0F0F0]"
-              placeholder="When Intervention Was Recorded"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              id="medicationInvolved"
-              name="medicationInvolved"
-              className="px-5 py-3 focus:outline-none bg-[#F0F0F0]"
-              placeholder="Medication Involved"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              id="yourIntervention"
-              name="yourIntervention"
-              className="px-5 py-3 focus:outline-none bg-[#F0F0F0]"
-              placeholder="What was your Intervention"
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <textarea
-              name="moreDetails"
-              id="moreDetails"
-              cols="30"
-              rows="10"
-              className="w-full h-36 bg-[#F0F0F0] px-5 py-2"
-              placeholder="Provide more details"
-            ></textarea>
-          </div>
-        </div>
+    <Layout>
+      <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] self-start mb-11 '>
+        <AddIntervention />
+        <p>Add Intervention</p>
       </div>
-      <MobileNavbar />
-    </div>
+      <form
+        className='flex flex-col gap-3 pt-8'
+        onSubmit={handleSubmit(async data => {
+          await api
+            .post('all_interventions/', {
+              patient: data.patientName,
+              pharmaceutical_care: '',
+              pharmaceutical_details: '',
+              medications: '',
+              proposed_intervention: '',
+              details: '',
+            })
+            .then(() => console.log('success'))
+            .catch(err => console.log(err));
+        })}
+      >
+        <div className='flex flex-col gap-2'>
+          <input
+            type='text'
+            id='patientName'
+            name='patientName'
+            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            placeholder='Patient Name'
+          />
+        </div>
+        <div className='flex flex-col gap-2'>
+          <input
+            type='text'
+            id='interventionLocation'
+            name='interventionLocation'
+            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            placeholder='Intervention Location'
+          />
+        </div>
+        <div className='flex flex-col gap-2'>
+          <select
+            id='interventionDiagnosis'
+            name='interventionDiagnosis'
+            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            onChange={handleDiagnosisChange}
+          >
+            <option value=''>Select a diagnosis</option>
+            {Object.keys(interventions).map(key => (
+              <option value={key} key={key}>
+                {key}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className='flex flex-col gap-2'>
+          <select
+            id='interventionReason'
+            name='interventionReason'
+            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+          >
+            <option value=''>Select a reason</option>
+            {interventions[diagnosis]?.reason.map(reason => (
+              <option value={reason} key={reason}>
+                {reason}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className='flex flex-col gap-2'>
+          <select
+            id='interventionSolution'
+            name='interventionSolution'
+            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+          >
+            <option value=''>Select a solution</option>
+            {interventions[diagnosis]?.solution.map(solution => (
+              <option value={solution} key={solution}>
+                {solution}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className='flex flex-col gap-2'>
+          <input
+            type='text'
+            id='medicationInvolved'
+            name='medicationInvolved'
+            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            placeholder='Medication Involved'
+          />
+        </div>
+        {/* <div className='flex flex-col gap-2'>
+          <input
+            type='text'
+            id='yourIntervention'
+            name='yourIntervention'
+            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            placeholder='What was your Intervention'
+          />
+        </div> */}
+        <div className='flex flex-col gap-2'>
+          <textarea
+            name='moreDetails'
+            id='moreDetails'
+            cols='30'
+            rows='10'
+            className='w-full h-36 bg-[#F0F0F0] px-5 py-2'
+            placeholder='Provide more details'
+          ></textarea>
+        </div>
+        <button className=' py-3 w-[50%] self-center rounded-md lg:text-lg bg-[#0146E9] text-white'>
+          Add Intervention
+        </button>
+      </form>
+    </Layout>
   );
 };
 
