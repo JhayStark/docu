@@ -22,7 +22,7 @@ const PatientCard = ({ name, id, age, gender, phoneNumber }) => {
             </div>
           </div>
           <div>
-            <Link href={`/interventions/${id}`}>
+            <Link href={`/patients/${id}`}>
               <FiFolder className='text-[#0146E9]  text-2xl md:text-2xl ' />
             </Link>
           </div>

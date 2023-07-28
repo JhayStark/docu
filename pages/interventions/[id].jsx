@@ -17,8 +17,8 @@ const Details = () => {
     <div>
       <div className='px-5 pb-28 lg:px-48'>
         <h1 className='mt-16 mb-12'>File of {data?.patient}</h1>
-        <div className='flex flex-row items-center'>
-          <div className='w-12 h-12 mr-2 bg-red-500 bg-center bg-cover rounded-full' />
+        <div className='flex flex-row items-center gap-5'>
+          <img src='/images/avatar.svg' />
           <p>Male</p>
         </div>
         <div className='flex flex-col gap-3 pt-4 '>

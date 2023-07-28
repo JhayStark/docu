@@ -9,12 +9,12 @@ const fetcher = url => api.get(url).then(res => res.data.results);
 
 const Index = () => {
   const { data, error, isLoading } = useSwr(
-    '/api/interventions/all_patients/?limit=2&offset=0',
+    '/api/interventions/all_patients/?limit=20&offset=0',
     fetcher
   );
   return (
     <Layout>
-      <Link href={'/patient/new'}>
+      <Link href={'/patients/new'}>
         <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] self-end '>
           <AddIntervention />
           <p>Add Patient</p>
