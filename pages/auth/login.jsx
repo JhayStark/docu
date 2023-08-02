@@ -27,8 +27,12 @@ const Login = () => {
       .then(res => {
         login(res.data, data.email);
         clearErrors();
+        reset();
       })
-      .catch(() => setLoginError('Enter valid username and password'));
+      .catch(err => {
+        console.error(err);
+        setLoginError('Enter valid username and password');
+      });
   };
 
   return (
@@ -46,7 +50,6 @@ const Login = () => {
             <form
               onSubmit={handleSubmit(async data => {
                 loginUser(data);
-                reset();
               })}
               className='flex flex-col items-center justify-center gap-8 '
             >

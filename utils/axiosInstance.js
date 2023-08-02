@@ -7,7 +7,6 @@ api.interceptors.request.use(
     const userJson = await localStorage.getItem('user');
     const user = JSON.parse(userJson);
     const accessToken = user.access;
-    console.log(accessToken);
     if (accessToken) {
       config.headers = {
         Authorization: `Bearer ${accessToken}`,

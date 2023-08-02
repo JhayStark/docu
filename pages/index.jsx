@@ -1,21 +1,14 @@
-import { useContext } from 'react';
-import InterventionCard from '@/components/InterventionCard';
-import MobileNavbar from '@/components/MobileNavbar';
+import dynamic from 'next/dynamic';
 import AddIntervention from '@/public/svgs/AddInterventionIcon';
 import PatientsIcon from '@/public/svgs/PatientsIcon';
 import Link from 'next/link';
+import Layout from '@/components/Layout';
+import useSwr from 'swr';
+import api from '@/utils/axiosInstance';
 import { FiFolder } from 'react-icons/fi';
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
-import dynamic from 'next/dynamic';
+import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { AuthContext } from '@/context/AuthProvider';
+import { useContext } from 'react';
 
 const ComponentWithNoSSR = dynamic(() => import('../components/DataTable'), {
   ssr: false,
@@ -99,18 +92,18 @@ const data = [
 const columns = [
   {
     name: 'Patient Name',
-    selector: row => row.patientName,
+    selector: row => row['first_name'],
     sortable: true,
   },
   {
-    name: 'Date',
-    selector: row => row.recordedDate,
+    name: 'Gender',
+    selector: row => row.gender,
     sortable: true,
   },
   {
     name: 'Action',
     selector: row => (
-      <Link href={`/user/${row.id}`}>
+      <Link href={`/patients/${row.id}`}>
         <FiFolder className='text-[#0146E9] text-xl md:text-2xl' />
       </Link>
     ),
@@ -118,153 +111,85 @@ const columns = [
   },
 ];
 
-const dataSource = [
-  {
-    id: 1,
-    recordedDate: '8/10/2022',
-    patientName: 'Dari Gemmill',
-    interventionName: 'Comedy|Drama|Romance',
-    pharmaceuticalCare: 'Drama|Romance',
-    interventions: 'Comedy|Drama',
-    company: 'Mybuzz',
-  },
-  {
-    id: 2,
-    recordedDate: '2/17/2023',
-    patientName: 'Thacher Richter',
-    interventionName: 'Action|Adventure|Drama|Romance|Western',
-    pharmaceuticalCare: 'Comedy',
-    interventions: 'Comedy|Drama|Romance',
-    company: 'Zava',
-  },
-  {
-    id: 3,
-    recordedDate: '9/30/2022',
-    patientName: 'Frederich Derdes',
-    interventionName: 'Comedy',
-    pharmaceuticalCare: 'Action|Sci-Fi',
-    interventions: 'Comedy',
-    company: 'Eayo',
-  },
-  {
-    id: 4,
-    recordedDate: '10/19/2022',
-    patientName: 'Arnie Spires',
-    interventionName: 'Documentary|Drama|Musical',
-    pharmaceuticalCare: '(no genres listed)',
-    interventions: 'Drama|War',
-    company: 'Shufflester',
-  },
-  {
-    id: 5,
-    recordedDate: '10/1/2022',
-    patientName: 'Whittaker Kamena',
-    interventionName: 'Drama',
-    pharmaceuticalCare: 'Documentary',
-    interventions: 'Drama',
-    company: 'Trilith',
-  },
-];
+const fetcher = url => api.get(url).then(res => res.data);
 
 const Index = () => {
   const { userData } = useContext(AuthContext);
+  const { data: tableData } = useSwr(
+    `/api/interventions/all_patients/?limit=10&offset=0`,
+    fetcher
+  );
 
   return (
-    <div className='font-sans'>
-      <div id='pageContainer' className='flex flex-col gap-5 p-3 lg:px-48 '>
-        <section
-          id='topSection'
-          className='flex flex-row items-center justify-between '
-        >
-          <div className='flex flex-col items-start'>
-            <h2 className='text-lg md:text-2xl'>Hello</h2>
-            <h1 className='text-2xl font-bold md:text-3xl'>
-              {`${userData.firstName} ${userData.lastName}`}
-            </h1>
+    <Layout>
+      <section
+        id='topSection'
+        className='flex flex-row items-center justify-between mb-5'
+      >
+        <div className='flex flex-col items-start'>
+          <h2 className='text-lg md:text-2xl'>Hello</h2>
+          <h1 className='text-2xl font-bold md:text-3xl'>
+            {`${userData.firstName} ${userData.lastName}`}
+          </h1>
+        </div>
+        <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9]'>
+          <AddIntervention />
+          <p>Add Intervention</p>
+        </div>
+      </section>
+      <section className='flex flex-row justify-between mb-5 text-white md:h-28'>
+        <div className='flex flex-row gap-2 rounded-md bg-[#0146E9] w-[51%] md:w-[48%] md:justify-evenly py-5 px-2  items-center'>
+          <PatientsIcon />
+          <div className='flex flex-col items-center'>
+            <h2 className='text-sm md:text-xl'>Patients Impacted</h2>
+            <h2 className='font-bold md:text-xl'>{tableData?.count}</h2>
           </div>
-          <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9]'>
-            <AddIntervention />
-            <p>Add Intervention</p>
+        </div>
+        <div className='flex flex-row gap-3 rounded-md bg-[#FF6332] w-[47%] md:w-[48%] md:justify-evenly py-5 px-2  items-center'>
+          <PatientsIcon />
+          <div className='flex flex-col items-center'>
+            <h2 className='text-sm md:text-xl'>Interventions</h2>
+            <h2 className='font-bold md:text-xl'>25</h2>
           </div>
-        </section>
-        <section className='flex flex-row justify-between text-white md:h-28'>
-          <div className='flex flex-row gap-2 rounded-md bg-[#0146E9] w-[51%] md:w-[48%] md:justify-evenly py-5 px-2  items-center'>
-            <PatientsIcon />
-            <div className='flex flex-col items-center'>
-              <h2 className='text-sm md:text-xl'>Patients Impacted</h2>
-              <h2 className='font-bold md:text-xl'>25</h2>
-            </div>
-          </div>
-          <div className='flex flex-row gap-3 rounded-md bg-[#FF6332] w-[47%] md:w-[48%] md:justify-evenly py-5 px-2  items-center'>
-            <PatientsIcon />
-            <div className='flex flex-col items-center'>
-              <h2 className='text-sm md:text-xl'>Interventions</h2>
-              <h2 className='font-bold md:text-xl'>25</h2>
-            </div>
-          </div>
-        </section>
-        <section className='w-full h-60 md:h-80'>
-          <div className='flex flex-row justify-between'>
-            <h1 className='font-medium md:text-3xl'>Interventions</h1>
-            <select name='' id='' className='bg-transparent'>
-              <option value=''>Year</option>
-              <option value=''>Month</option>
-              <option value=''>Week</option>
-            </select>
-          </div>
-          <ResponsiveContainer width='100%' height='100%'>
-            <AreaChart
-              width={500}
-              height={400}
-              data={data}
-              margin={{
-                top: 10,
-                right: 0,
-                left: 0,
-                bottom: 0,
-              }}
-            >
-              <XAxis dataKey='name' />
+        </div>
+      </section>
+      <section className='w-full mb-16 h-60 md:h-80'>
+        <div className='flex flex-row justify-between'>
+          <h1 className='font-medium md:text-3xl'>Interventions</h1>
+          <select name='' id='' className='bg-transparent'>
+            <option value=''>Year</option>
+            <option value=''>Month</option>
+            <option value=''>Week</option>
+          </select>
+        </div>
+        <ResponsiveContainer width='100%' height='100%'>
+          <AreaChart
+            width={500}
+            height={400}
+            data={data}
+            margin={{
+              top: 10,
+              right: 0,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <XAxis dataKey='name' />
 
-              <Tooltip />
-              <Area
-                type='monotone'
-                dataKey='uv'
-                stroke='#8884d8'
-                fill='#8884d8'
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </section>
-        <section className='mt-5'>
-          <ComponentWithNoSSR columns={columns} dataSource={dataSource} />
-        </section>
-        <section className=''>
-          <div className='flex flex-row justify-between'>
-            <h2 className='font-bold'>Reviews</h2>
-            <div className='flex flex-row items-center gap-2 text-[#0146E9]'>
-              <AddIntervention />
-              <h2>Add review</h2>
-            </div>
-          </div>
-          <div className='grid grid-cols-2 gap-3 px-1 py-5 pb-20'>
-            <InterventionCard />
-            <InterventionCard />
-            <InterventionCard />
-            <InterventionCard />
-            <InterventionCard />
-            <InterventionCard />
-            <InterventionCard />
-            <InterventionCard />
-            <InterventionCard />
-            <InterventionCard />
-            <InterventionCard />
-          </div>
-        </section>
-      </div>
-
-      <MobileNavbar />
-    </div>
+            <Tooltip />
+            <Area
+              type='monotone'
+              dataKey='uv'
+              stroke='#8884d8'
+              fill='#8884d8'
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </section>
+      <section className='mt-5'>
+        <ComponentWithNoSSR columns={columns} dataSource={tableData?.results} />
+      </section>
+    </Layout>
   );
 };
 
