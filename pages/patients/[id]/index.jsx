@@ -26,12 +26,11 @@ const PatientDetails = () => {
         <div className='flex flex-row items-center gap-5'>
           <img src='/images/avatar.svg' />
           <div>
-            <p>{`${profile?.first_name} ${profile?.last_name}`}</p>
-            <p>{profile?.gender}</p>
-            <p>{profile?.age}</p>
+            <p className='text-xl'>{`${profile?.first_name} ${profile?.last_name}, ${profile?.gender}`}</p>
+            <p>{profile?.age} years</p>
           </div>
         </div>
-        <Link href={'/interventions/new'}>
+        <Link href={`/patients/${router.query.id}/new-intervention`}>
           <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] self-end '>
             <AddIntervention />
             <p>Add Intervention</p>

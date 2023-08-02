@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   const login = (user, email) => {
     localStorage.setItem('user', JSON.stringify(user));
     api
-      .get(`api/accounts/all_accounts/?id=1`)
+      .get(`api/accounts/all_accounts/?email=${email}`)
       .then(res => {
         const userInfo = res.data.results[0];
         const storedUserData = {

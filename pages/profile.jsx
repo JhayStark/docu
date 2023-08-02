@@ -1,12 +1,11 @@
-import { useState, useContext } from 'react';
-import { AuthContext } from '@/context/AuthProvider';
 import api from '@/utils/axiosInstance';
 import useSwr from 'swr';
-import { useForm } from 'react-hook-form';
-import AddIntervention from '@/public/svgs/AddInterventionIcon';
-import { FiEdit } from 'react-icons/fi';
 import Layout from '@/components/Layout';
-import { BiUserCircle } from 'react-icons/bi';
+import AddIntervention from '@/public/svgs/AddInterventionIcon';
+import { useForm } from 'react-hook-form';
+import { FiEdit } from 'react-icons/fi';
+import { useState, useContext, useEffect } from 'react';
+import { AuthContext } from '@/context/AuthProvider';
 
 const fetcher = url => api.get(url).then(res => res.data.results[0]);
 const emfetcher = url => api.get(url).then(res => res.data.results);
@@ -38,8 +37,11 @@ const EmployerDetails = ({ employer }) => {
                 category: data.category,
                 place_of_work: data.placeOfWork,
               })
-              .then(res => console.log(res))
-              .catch(error => console.error(error))
+              .then(() => {
+                alert('Success');
+                reset();
+              })
+              .catch(() => alert('Failed to add employer'))
         )}
       >
         <div className='flex flex-row items-center justify-between'>
@@ -67,7 +69,7 @@ const EmployerDetails = ({ employer }) => {
         {employerEdit && (
           <button
             type='submit'
-            className='py-1 mt-2 text-white bg-green-300 rounded-md w-[50%] self-center cursor-pointer'
+            className='py-1 mt-1 text-white bg-green-300 rounded-md w-[50%] self-center cursor-pointer'
           >
             Save
           </button>
@@ -77,7 +79,7 @@ const EmployerDetails = ({ employer }) => {
   );
 };
 
-const EmployerModal = ({ setEmployerModal, username }) => {
+const EmployerModal = ({ setEmployerModal }) => {
   const defaultValues = {
     placeOfWork: '',
     location: '',
@@ -92,7 +94,7 @@ const EmployerModal = ({ setEmployerModal, username }) => {
 
   return (
     <div className='fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center backdrop-blur-sm'>
-      <div className='w-[30%] bg-white p-5 rounded-lg shadow-xl  '>
+      <div className='w-[80%] bg-white p-5 rounded-lg shadow-xl  '>
         <h2 className='mb-3 text-xl font-medium'>Employer Details</h2>
         <form
           className='flex flex-col gap-3'
@@ -103,9 +105,11 @@ const EmployerModal = ({ setEmployerModal, username }) => {
                   location: data.location,
                   category: data.category,
                   place_of_work: data.placeOfWork,
-                  user: username,
                 })
-                .then(res => console.log(res))
+                .then(res => {
+                  alert('success');
+                  reset();
+                })
                 .catch(error => console.error(error))
           )}
         >
@@ -152,17 +156,12 @@ const Profile = () => {
   const [employerModal, setEmployerModal] = useState(false);
   const [professionalStatus, setProfessionalStatus] = useState('');
   const { userData } = useContext(AuthContext);
-  const { data, error, isLoading } = useSwr(
+  const { data } = useSwr(
     `/api/accounts/all_accounts/?email=${userData.email}`,
     fetcher
   );
 
-  const {
-    data: employerData,
-    error: errorFetchingEmployerData,
-    isLoading: isLoadingEmployerData,
-  } = useSwr(`/api/accounts/employers/`, emfetcher);
-  console.log(employerData);
+  const { data: employerData } = useSwr(`/api/accounts/employers/`, emfetcher);
 
   const defaultValues = {
     user: '',
@@ -172,6 +171,7 @@ const Profile = () => {
     location: '',
     category: '',
     registrationNumber: ' ',
+    studentId: '',
   };
 
   const {
@@ -182,21 +182,35 @@ const Profile = () => {
     formState: { errors },
   } = useForm({ defaultValues });
 
-  const saveUserData = async newData => {
-    try {
-      api.patch(`/api/accounts/all_accounts/${data.id}/`, {
-        email: newData.user,
-        is_new_user: true,
-        accounts_profile: {
-          gender: newData.gender,
-          professional_status: newData.professionalStatus,
-          registration_number: newData.registrationNumber,
-        },
-      });
-      return 'success';
-    } catch (e) {
-      console.error(e);
+  useEffect(() => {
+    if (data) {
+      setProfessionalStatus(data['accounts_profile']['professional_status']);
     }
+  }, [data]);
+
+  const saveUserData = async newData => {
+    api
+      .patch(`/api/accounts/all_accounts/${data.id}/`, {
+        email: newData.user || userData.email,
+        ['is_new_user']: false,
+        ['phone_number']: newData.phoneNumber || data['phone_number'],
+        ['accounts_profile']: {
+          gender: newData.gender || data['accounts_profile']['gender'],
+          ['professional_status']:
+            professionalStatus ||
+            data['accounts_profile']['professional_status'],
+          ['registration_number']:
+            newData.registrationNumber ||
+            data['accounts_profile']['registration_number'],
+          ['student_id']:
+            newData.studentId || data['accounts_profile']['student_id'],
+        },
+      })
+      .then(() => {
+        alert('Success');
+        reset();
+      })
+      .catch(() => alert('Failed to update profile'));
   };
   return (
     <Layout>
@@ -205,7 +219,7 @@ const Profile = () => {
           <img src='/images/avatar.svg' />
           <p className='ml-5 text-lg font-medium'>{`${userData.firstName} ${userData.lastName}`}</p>
         </div>
-        <p className='py-3 text-xl font-medium'>User Profile</p>
+        {/* <p className='py-3 text-xl font-medium'>User Profile</p> */}
         <div>
           <form
             action=''
@@ -224,49 +238,61 @@ const Profile = () => {
             <input
               type='text'
               className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
-              placeholder='Phone Number'
+              placeholder={data ? data['phone_number'] : 'Phone Number'}
               {...register('phoneNumber')}
             />
-            <input
-              type='text'
+            <select
               className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
-              placeholder={data ? `${data.accounts_profile.gender}` : 'Gender'}
               {...register('gender')}
-            />
+            >
+              <option value=''>Select gender</option>
+              <option value='Male'>Male</option>
+              <option value='Female'>Female</option>
+            </select>
             <select
               name=''
               id=''
               className='bg-inherit border-b-2 border-[#A29E95] px-2 py-2 focus:outline-none'
+              value={professionalStatus}
               onChange={e => {
                 setRole(e.target.value);
                 setProfessionalStatus(e.target.value);
               }}
             >
               <option value=''>Select your role</option>
-              <option value='student'>Student Intern</option>
-              <option value='student'>Intern Pharmacist</option>
-              <option value='pharmacist'>Pharmacist (B. Pharm)</option>
-              <option value='pharmacist'>Pharmacist (Pharm D)</option>
+              <option value='Student Intern'>Pharmacy Student</option>
+              <option value='Intern Pharmacist'>Intern Pharmacist</option>
+              <option value='Pharmacist (B. Pharm)'>
+                Pharmacist (B. Pharm)
+              </option>
+              <option value='Pharmacist (Pharm D)'>Pharmacist (Pharm D)</option>
             </select>
-            {role === 'pharmacist' && (
-              <input
-                type='text'
-                className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95] '
-                placeholder='Registration Number '
-                {...register('registrationNumber')}
-              />
-            )}
-            {role === 'student' && (
+            {professionalStatus.includes('Pharmacist') &&
+              !professionalStatus.includes('Intern') && (
+                <input
+                  type='text'
+                  className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95] '
+                  placeholder={
+                    data
+                      ? data['accounts_profile']['registration_number']
+                      : 'Registration Number'
+                  }
+                  {...register('registrationNumber')}
+                />
+              )}
+            {professionalStatus.includes('Intern') && (
               <input
                 type='text'
                 className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
-                placeholder='Student Number'
-                {...register('registrationNumber')}
+                placeholder={
+                  data ? data['accounts_profile']['student_id'] : 'Student ID'
+                }
+                {...register('studentId')}
               />
             )}
             <button
               type='submit'
-              className='mt-10 px-36 py-4 bg-inherit border-2 self-center border-[#A29E95]'
+              className='mt-5 px-36 py-4 bg-inherit border-2 self-center border-[#A29E95]'
             >
               Save
             </button>
@@ -279,17 +305,14 @@ const Profile = () => {
             <p>Add Employer</p>
           </div>
 
-          <div className='grid grid-cols-2 gap-3'>
+          <div className='grid grid-cols-2'>
             {employerData &&
               employerData.map(employer => (
                 <EmployerDetails key={employer.id} employer={employer} />
               ))}
           </div>
           {employerModal && (
-            <EmployerModal
-              setEmployerModal={setEmployerModal}
-              username={data?.username}
-            />
+            <EmployerModal setEmployerModal={setEmployerModal} />
           )}
         </div>
       </div>

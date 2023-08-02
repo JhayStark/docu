@@ -1,15 +1,14 @@
-import { useContext } from 'react';
 import dynamic from 'next/dynamic';
-import InterventionCard from '@/components/InterventionCard';
-import MobileNavbar from '@/components/MobileNavbar';
 import AddIntervention from '@/public/svgs/AddInterventionIcon';
 import PatientsIcon from '@/public/svgs/PatientsIcon';
 import Link from 'next/link';
+import Layout from '@/components/Layout';
+import useSwr from 'swr';
+import api from '@/utils/axiosInstance';
 import { FiFolder } from 'react-icons/fi';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
-
 import { AuthContext } from '@/context/AuthProvider';
-import Layout from '@/components/Layout';
+import { useContext } from 'react';
 
 const ComponentWithNoSSR = dynamic(() => import('../components/DataTable'), {
   ssr: false,
@@ -93,18 +92,18 @@ const data = [
 const columns = [
   {
     name: 'Patient Name',
-    selector: row => row.patientName,
+    selector: row => row['first_name'],
     sortable: true,
   },
   {
-    name: 'Date',
-    selector: row => row.recordedDate,
+    name: 'Gender',
+    selector: row => row.gender,
     sortable: true,
   },
   {
     name: 'Action',
     selector: row => (
-      <Link href={`/user/${row.id}`}>
+      <Link href={`/patients/${row.id}`}>
         <FiFolder className='text-[#0146E9] text-xl md:text-2xl' />
       </Link>
     ),
@@ -112,56 +111,14 @@ const columns = [
   },
 ];
 
-const dataSource = [
-  {
-    id: 1,
-    recordedDate: '8/10/2022',
-    patientName: 'Dari Gemmill',
-    interventionName: 'Comedy|Drama|Romance',
-    pharmaceuticalCare: 'Drama|Romance',
-    interventions: 'Comedy|Drama',
-    company: 'Mybuzz',
-  },
-  {
-    id: 2,
-    recordedDate: '2/17/2023',
-    patientName: 'Thacher Richter',
-    interventionName: 'Action|Adventure|Drama|Romance|Western',
-    pharmaceuticalCare: 'Comedy',
-    interventions: 'Comedy|Drama|Romance',
-    company: 'Zava',
-  },
-  {
-    id: 3,
-    recordedDate: '9/30/2022',
-    patientName: 'Frederich Derdes',
-    interventionName: 'Comedy',
-    pharmaceuticalCare: 'Action|Sci-Fi',
-    interventions: 'Comedy',
-    company: 'Eayo',
-  },
-  {
-    id: 4,
-    recordedDate: '10/19/2022',
-    patientName: 'Arnie Spires',
-    interventionName: 'Documentary|Drama|Musical',
-    pharmaceuticalCare: '(no genres listed)',
-    interventions: 'Drama|War',
-    company: 'Shufflester',
-  },
-  {
-    id: 5,
-    recordedDate: '10/1/2022',
-    patientName: 'Whittaker Kamena',
-    interventionName: 'Drama',
-    pharmaceuticalCare: 'Documentary',
-    interventions: 'Drama',
-    company: 'Trilith',
-  },
-];
+const fetcher = url => api.get(url).then(res => res.data);
 
 const Index = () => {
   const { userData } = useContext(AuthContext);
+  const { data: tableData } = useSwr(
+    `/api/interventions/all_patients/?limit=10&offset=0`,
+    fetcher
+  );
 
   return (
     <Layout>
@@ -185,7 +142,7 @@ const Index = () => {
           <PatientsIcon />
           <div className='flex flex-col items-center'>
             <h2 className='text-sm md:text-xl'>Patients Impacted</h2>
-            <h2 className='font-bold md:text-xl'>25</h2>
+            <h2 className='font-bold md:text-xl'>{tableData?.count}</h2>
           </div>
         </div>
         <div className='flex flex-row gap-3 rounded-md bg-[#FF6332] w-[47%] md:w-[48%] md:justify-evenly py-5 px-2  items-center'>
@@ -230,29 +187,7 @@ const Index = () => {
         </ResponsiveContainer>
       </section>
       <section className='mt-5'>
-        <ComponentWithNoSSR columns={columns} dataSource={dataSource} />
-      </section>
-      <section className=''>
-        <div className='flex flex-row justify-between'>
-          <h2 className='font-bold'>Reviews</h2>
-          <div className='flex flex-row items-center gap-2 text-[#0146E9]'>
-            <AddIntervention />
-            <h2>Add review</h2>
-          </div>
-        </div>
-        <div className='grid grid-cols-2 gap-3 px-1 py-5 pb-20'>
-          <InterventionCard />
-          <InterventionCard />
-          <InterventionCard />
-          <InterventionCard />
-          <InterventionCard />
-          <InterventionCard />
-          <InterventionCard />
-          <InterventionCard />
-          <InterventionCard />
-          <InterventionCard />
-          <InterventionCard />
-        </div>
+        <ComponentWithNoSSR columns={columns} dataSource={tableData?.results} />
       </section>
     </Layout>
   );

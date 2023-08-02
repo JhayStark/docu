@@ -27,6 +27,7 @@ const Login = () => {
       .then(res => {
         login(res.data, data.email);
         clearErrors();
+        reset();
       })
       .catch(err => {
         console.error(err);
@@ -49,7 +50,6 @@ const Login = () => {
             <form
               onSubmit={handleSubmit(async data => {
                 loginUser(data);
-                reset();
               })}
               className='flex flex-col items-center justify-center gap-8 '
             >

@@ -18,11 +18,11 @@ const MobileNavbar = () => {
   return (
     <nav className='fixed bottom-0 flex w-[100%] flex-row  text-[#0146E9] justify-between items-center px-6 md:px-20 py-5 lg:py-3 shadow-md bg-white'>
       <MenuItem link='/' name='Home' icon={<FaHome />} />
-      <MenuItem
+      {/* <MenuItem
         link='/interventions'
         name='Interventions'
         icon={<FaRegCommentDots />}
-      />
+      /> */}
       <MenuItem link='/patients' name='Patients' icon={<FaPeopleCarry />} />
       <MenuItem link='/profile' name='Profile' icon={<ImProfile />} />
     </nav>

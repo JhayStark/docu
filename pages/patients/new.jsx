@@ -41,11 +41,11 @@ const New = () => {
               phone_number: data.phoneNumber,
             })
             .then(() => {
-              clearErrors();
-              reset();
+              alert('Created Succesfully ');
+              router.push('/patients');
             })
             .catch(err => {
-              console.log(err);
+              alert('Network error try again');
             });
         })}
       >
@@ -120,14 +120,11 @@ const New = () => {
             rows='10'
             className='w-full h-36 bg-[#F0F0F0] px-5 py-2'
             placeholder='Provide more details'
-            {...register('furtherDetails', { required: true })}
+            {...register('furtherDetails', { required: false })}
           ></textarea>
         </div>
 
-        <button
-          onClick={() => router.push('/patients')}
-          className=' py-3 w-[50%] mt-10 self-center rounded-md lg:text-lg bg-[#0146E9] text-white'
-        >
+        <button className=' py-3 w-[50%] mt-10 self-center rounded-md lg:text-lg bg-[#0146E9] text-white'>
           Add Patient
         </button>
       </form>

@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import Layout from '@/components/Layout';
-import AddIntervention from '@/public/svgs/AddInterventionIcon';
 import api from '@/utils/axiosInstance';
+import useSwr from 'swr';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
 const interventions = {
   'Ineffective medicine': {
@@ -96,8 +97,18 @@ const interventions = {
   },
 };
 
+const emfetcher = url => api.get(url).then(res => res.data.results);
+const patientFetrcher = url => api.get(url).then(res => res.data);
+
 const New = () => {
+  const router = useRouter();
   const [diagnosis, setDiagnosis] = useState('');
+  const { data: employerData } = useSwr(`/api/accounts/employers/`, emfetcher);
+  const { data: patient } = useSwr(
+    `/api/interventions/all_patients/${router.query.id}`,
+    patientFetrcher
+  );
+
   const defaultValues = {
     patientName: '',
     interventionLocation: '',
@@ -111,61 +122,81 @@ const New = () => {
   const {
     handleSubmit,
     register,
-    clearErrors,
     reset,
+    clearErrors,
     formState: { errors },
   } = useForm(defaultValues);
 
   const handleDiagnosisChange = e => {
     setDiagnosis(e.target.value);
+    console.log(diagnosis);
   };
 
   return (
     <Layout>
-      <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] self-start mb-11 '>
-        <AddIntervention />
-        <p>Add Intervention</p>
-      </div>
       <form
         className='flex flex-col gap-3 pt-8'
         onSubmit={handleSubmit(async data => {
           await api
-            .post('all_interventions/', {
-              patient: data.patientName,
-              pharmaceutical_care: '',
-              pharmaceutical_details: '',
-              medications: '',
-              proposed_intervention: '',
-              details: '',
+            .post('/api/interventions/all_interventions/', {
+              patient: patient.id,
+              ['pharmaceutical_care']: diagnosis,
+              ['pharmaceutical_details']: data.interventionReason,
+              medication: data.medicationInvolved,
+              ['proposed_intervention']: data.interventionSolution,
+              details: data.moreDetails,
+              ['intervention_location']: data.interventionLocation,
             })
-            .then(() => console.log('success'))
-            .catch(err => console.log(err));
+            .then(() => {
+              alert('success');
+              clearErrors();
+              reset();
+            })
+            .catch(err => {
+              console.error(err);
+              alert('Network error, try again');
+            });
         })}
       >
         <div className='flex flex-col gap-2'>
-          <input
-            type='text'
-            id='patientName'
-            name='patientName'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
-            placeholder='Patient Name'
-          />
+          {
+            <input
+              type='text'
+              id='patientName'
+              name='patientName'
+              className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+              placeholder={
+                patient && `${patient['first_name']} ${patient['last_name']}`
+              }
+            />
+          }
         </div>
         <div className='flex flex-col gap-2'>
-          <input
+          <select
             type='text'
             id='interventionLocation'
             name='interventionLocation'
             className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
             placeholder='Intervention Location'
-          />
+            {...register('interventionLocation', { required: true })}
+          >
+            <option value=''>Select intervention location</option>
+            {employerData?.map(employer => (
+              <option value={employer['place_of_work']} key={employer.id}>
+                {employer['place_of_work']}
+              </option>
+            ))}
+          </select>
         </div>
         <div className='flex flex-col gap-2'>
           <select
             id='interventionDiagnosis'
             name='interventionDiagnosis'
             className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
-            onChange={handleDiagnosisChange}
+            value={diagnosis}
+            onChange={e => {
+              handleDiagnosisChange(e);
+            }}
           >
             <option value=''>Select a diagnosis</option>
             {Object.keys(interventions).map(key => (
@@ -180,6 +211,7 @@ const New = () => {
             id='interventionReason'
             name='interventionReason'
             className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            {...register('interventionReason', { required: true })}
           >
             <option value=''>Select a reason</option>
             {interventions[diagnosis]?.reason.map(reason => (
@@ -194,6 +226,7 @@ const New = () => {
             id='interventionSolution'
             name='interventionSolution'
             className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            {...register('interventionSolution', { required: true })}
           >
             <option value=''>Select a solution</option>
             {interventions[diagnosis]?.solution.map(solution => (
@@ -210,17 +243,9 @@ const New = () => {
             name='medicationInvolved'
             className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
             placeholder='Medication Involved'
+            {...register('medicationInvolved', { required: false })}
           />
         </div>
-        {/* <div className='flex flex-col gap-2'>
-          <input
-            type='text'
-            id='yourIntervention'
-            name='yourIntervention'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
-            placeholder='What was your Intervention'
-          />
-        </div> */}
         <div className='flex flex-col gap-2'>
           <textarea
             name='moreDetails'
@@ -229,6 +254,7 @@ const New = () => {
             rows='10'
             className='w-full h-36 bg-[#F0F0F0] px-5 py-2'
             placeholder='Provide more details'
+            {...register('moreDetails', { required: false })}
           ></textarea>
         </div>
         <button className=' py-3 w-[50%] self-center rounded-md lg:text-lg bg-[#0146E9] text-white'>

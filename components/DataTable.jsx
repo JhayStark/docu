@@ -1,21 +1,19 @@
-import { useRouter } from "next/router";
-import React, { useMemo, useState } from "react";
-import DataTable from "react-data-table-component";
-import { MdOutlineClear } from "react-icons/md";
-
-import dynamic from "next/dynamic";
+import { useRouter } from 'next/router';
+import React, { useMemo, useState } from 'react';
+import DataTable from 'react-data-table-component';
+import { MdOutlineClear } from 'react-icons/md';
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
-  <div className="flex flex-row h-8 bg-transparent !important ">
+  <div className='flex flex-row h-8 bg-transparent !important '>
     <input
-      id="search"
-      type="text"
-      placeholder="Filter By Name"
+      id='search'
+      type='text'
+      placeholder='Filter By Name'
       value={filterText}
       onChange={onFilter}
-      className="p-2 rounded outline-none"
+      className='p-2 rounded outline-none'
     />
-    <button onClick={onClear} className="bg-[#800020] p-2 text-white h-full">
+    <button onClick={onClear} className='bg-[#800020] p-2 text-white h-full'>
       <MdOutlineClear />
     </button>
   </div>
@@ -24,31 +22,26 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
 const DataTableComponent = ({ columns, dataSource }) => {
   const router = useRouter();
 
-  const handleRowClicked = (row) => {
+  const handleRowClicked = row => {
     // Navigate to the details page with the clicked row's ID as a query parameter
     router.push(`/user/${row.id}`);
   };
 
-  const [filterText, setFilterText] = useState("");
+  const [filterText, setFilterText] = useState('');
   const [data, setData] = useState(dataSource);
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false);
-  const filteredItems = data.filter(
-    (item) =>
-      item.patientName &&
-      item.patientName.toLowerCase().includes(filterText.toLowerCase())
-  );
 
   const subHeaderComponentMemo = useMemo(() => {
     const handleClear = () => {
       if (filterText) {
         setResetPaginationToggle(!resetPaginationToggle);
-        setFilterText("");
+        setFilterText('');
       }
     };
 
     return (
       <FilterComponent
-        onFilter={(e) => setFilterText(e.target.value)}
+        onFilter={e => setFilterText(e.target.value)}
         onClear={handleClear}
         filterText={filterText}
       />
@@ -58,7 +51,7 @@ const DataTableComponent = ({ columns, dataSource }) => {
   return (
     <DataTable
       columns={columns}
-      data={filteredItems}
+      data={dataSource}
       pagination
       paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
       subHeader
@@ -71,12 +64,12 @@ const DataTableComponent = ({ columns, dataSource }) => {
       customStyles={{
         headCells: {
           style: {
-            justifyContent: "center",
+            justifyContent: 'center',
           },
         },
         cells: {
           style: {
-            justifyContent: "center",
+            justifyContent: 'center',
           },
         },
       }}
