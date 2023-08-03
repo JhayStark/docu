@@ -18,74 +18,74 @@ const data = [
   {
     name: 'Jan',
     uv: 0,
-    pv: 2400,
-    amt: 2400,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'Feb',
-    uv: 300,
-    pv: 1398,
-    amt: 2210,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'Mar',
-    uv: 600,
-    pv: 9800,
-    amt: 2290,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'Apr',
-    uv: 800,
-    pv: 3908,
-    amt: 2000,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'May',
-    uv: 1500,
-    pv: 4800,
-    amt: 2181,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'Jun',
-    uv: 2000,
-    pv: 3800,
-    amt: 2500,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'Jul',
-    uv: 2400,
-    pv: 4300,
-    amt: 2100,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'Aug',
-    uv: 2800,
-    pv: 6300,
-    amt: 1800,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'Sep',
-    uv: 3200,
-    pv: 7300,
-    amt: 1900,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'Oct',
-    uv: 3800,
-    pv: 8500,
-    amt: 2200,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'Nov',
-    uv: 4500,
-    pv: 10000,
-    amt: 2600,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
   {
     name: 'Dec',
-    uv: 5500,
-    pv: 12000,
-    amt: 3000,
+    uv: 0,
+    pv: 0,
+    amt: 0,
   },
 ];
 
@@ -116,7 +116,7 @@ const fetcher = url => api.get(url).then(res => res.data);
 const Index = () => {
   const { userData } = useContext(AuthContext);
   const { data: tableData } = useSwr(
-    `/api/interventions/all_patients/?limit=10&offset=0`,
+    `/api/interventions/all_patients/?limit=5&offset=0`,
     fetcher
   );
 
@@ -124,18 +124,18 @@ const Index = () => {
     <Layout>
       <section
         id='topSection'
-        className='flex flex-row items-center justify-between mb-5'
+        className='flex flex-row items-center justify-between '
       >
         <div className='flex flex-col items-start'>
-          <h2 className='text-lg md:text-2xl'>Hello</h2>
-          <h1 className='text-2xl font-bold md:text-3xl'>
-            {`${userData.firstName} ${userData.lastName}`}
-          </h1>
+          <h2 className='text-lg md:text-2xl'>Hi {`${userData.firstName}`}</h2>
+          <h1 className='text-2xl font-bold md:text-3xl'></h1>
         </div>
-        <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9]'>
-          <AddIntervention />
-          <p>Add Intervention</p>
-        </div>
+        <Link href='/patients/new'>
+          <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] hover:opacity-70'>
+            <AddIntervention />
+            <p>Add Patient</p>
+          </div>
+        </Link>
       </section>
       <section className='flex flex-row justify-between mb-5 text-white md:h-28'>
         <div className='flex flex-row gap-2 rounded-md bg-[#0146E9] w-[51%] md:w-[48%] md:justify-evenly py-5 px-2  items-center'>
@@ -156,7 +156,7 @@ const Index = () => {
       <section className='w-full mb-16 h-60 md:h-80'>
         <div className='flex flex-row justify-between'>
           <h1 className='font-medium md:text-3xl'>Interventions</h1>
-          <select name='' id='' className='bg-transparent'>
+          <select name='' id='' className='bg-transparent focus:outline-none'>
             <option value=''>Year</option>
             <option value=''>Month</option>
             <option value=''>Week</option>
@@ -186,7 +186,7 @@ const Index = () => {
           </AreaChart>
         </ResponsiveContainer>
       </section>
-      <section className='mt-5'>
+      <section className='mt-5 mb-5'>
         <ComponentWithNoSSR columns={columns} dataSource={tableData?.results} />
       </section>
     </Layout>

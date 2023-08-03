@@ -24,7 +24,7 @@ const Index = () => {
   }, [patientSearchInput, 500]);
   return (
     <Layout>
-      <div className='flex flex-row items-center justify-between '>
+      <div className='sticky top-0 flex flex-row items-center justify-between py-1 bg-white'>
         <Link href={'/patients/new'}>
           <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] self-end '>
             <AddIntervention />
@@ -33,8 +33,8 @@ const Index = () => {
         </Link>
         <input
           type='text'
-          placeholder='Search patient name'
-          className='border-[1px] w-[40%] py-1 px-2 rounded-md focus:outline-none'
+          placeholder='Search patient'
+          className='px-2 w-[50%] lg:w-[30%] border-[1px] py-1  rounded-md focus:outline-none'
           onChange={e => setPatientSearchInput(e.target.value)}
           value={patientSearchInput}
         />
