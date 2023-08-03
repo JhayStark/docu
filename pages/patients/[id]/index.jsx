@@ -22,22 +22,30 @@ const PatientDetails = () => {
 
   return (
     <Layout>
-      <div className='flex flex-row items-center justify-between mb-5'>
-        <div className='flex flex-row items-center gap-5'>
-          <img src='/images/avatar.svg' />
-          <div>
-            <p className='text-xl'>{`${profile?.first_name} ${profile?.last_name}, ${profile?.gender}`}</p>
-            <p>{profile?.age} years</p>
+      <div className='sticky top-0 py-1 bg-white'>
+        <div className='flex flex-row items-center justify-between mb-5 bg-white '>
+          <div className='flex flex-row items-center gap-5'>
+            <img src='/images/avatar.svg' />
+            <div>
+              <p className='text-lg'>{`${profile?.first_name} ${profile?.last_name}, ${profile?.gender}`}</p>
+              <p>{profile?.age} years</p>
+            </div>
           </div>
+          <Link href={`/patients/${router.query.id}/new-intervention`}>
+            <div className=' hidden lg:flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] self-end '>
+              <AddIntervention />
+              <p>Add Intervention</p>
+            </div>
+          </Link>
         </div>
         <Link href={`/patients/${router.query.id}/new-intervention`}>
-          <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] self-end '>
+          <div className='flex lg:hidden flex-row md:text-2xl items-center gap-2 text-[#0146E9] self-end '>
             <AddIntervention />
             <p>Add Intervention</p>
           </div>
         </Link>
       </div>
-      <div className='grid grid-cols-1 gap-3 py-5 md:grid-cols-2'>
+      <div className='grid grid-cols-1 gap-3 pt-2 pb-5 md:grid-cols-2'>
         {data?.map(intervention => (
           <InterventionMainCard
             key={intervention.id}

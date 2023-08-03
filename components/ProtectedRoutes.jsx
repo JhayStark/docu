@@ -11,7 +11,7 @@ const ProtectedRoutes = ({ children }) => {
         router.push('/auth/login');
       }
     }
-  }, [intializing]);
+  }, [intializing, isAuthenticated, router]);
   if (intializing) return <h2>Application loading</h2>;
   if (!intializing && !isAuthenticated) return <>{children}</>;
   if (!intializing && isAuthenticated) return <>{children}</>;

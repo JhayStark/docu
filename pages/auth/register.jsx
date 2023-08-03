@@ -167,13 +167,13 @@ const Register = () => {
               )}
               <button
                 type='submit'
-                className='px-3 py-2 font-medium text-white bg-blue-700 rounded cursor-pointer w-60 hover:bg-opacity-90'
+                className='px-3 py-2 font-medium text-white bg-[#292461] rounded cursor-pointer w-60 hover:bg-opacity-90'
               >
                 Sign Up
               </button>
               <Link
                 href='/auth/login'
-                className='font-medium text-blue-700 cursor-pointer hover:underline hover:bg-opacity-90'
+                className='font-medium text-[#292461] cursor-pointer hover:underline hover:bg-opacity-90'
               >
                 Login?
               </Link>

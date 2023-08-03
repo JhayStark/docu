@@ -5,7 +5,9 @@ import ProtectedRoutes from '@/components/ProtectedRoutes';
 export default function App({ Component, pageProps }) {
   return (
     <AuthProvider>
-      <Component {...pageProps} />
+      <ProtectedRoutes>
+        <Component {...pageProps} />
+      </ProtectedRoutes>
     </AuthProvider>
   );
 }
