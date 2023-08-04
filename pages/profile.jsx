@@ -20,26 +20,29 @@ const EmployerDetails = ({ employer }) => {
 };
 
 const Profile = () => {
-  const [role, setRole] = useState('');
   const [employerModal, setEmployerModal] = useState(false);
+  const [gender, setGender] = useState('');
   const [professionalStatus, setProfessionalStatus] = useState('');
+
   const { userData, logout } = useContext(AuthContext);
   const { data } = useSwr(
     `/api/accounts/all_accounts/?email=${userData.email}`,
     fetcher
   );
-
   const { data: employerData } = useSwr(`/api/accounts/employers/`, emfetcher);
+
+  useEffect(() => {
+    if (data) {
+      setGender(data['accounts_profile']['gender']);
+      setProfessionalStatus(data['accounts_profile']['professional_status']);
+    }
+  }, [data]);
 
   const defaultValues = {
     user: '',
     phoneNumber: '',
-    gender: '',
-    placeOfWork: '',
-    location: '',
-    category: '',
-    registrationNumber: ' ',
     studentId: '',
+    registrationNumber: '',
   };
 
   const {
@@ -50,35 +53,81 @@ const Profile = () => {
     formState: { errors },
   } = useForm({ defaultValues });
 
-  useEffect(() => {
-    if (data) {
-      setProfessionalStatus(data['accounts_profile']['professional_status']);
-    }
-  }, [data]);
+  const ProfessionalIDInput = () => {
+    const renderInputPlaceholder = () => {
+      if (
+        !professionalStatus.includes('Intern') &&
+        !professionalStatus.includes('Student')
+      ) {
+        const registrationNumber =
+          data['accounts_profile']['registration_number'];
+        return registrationNumber ? registrationNumber : 'Registration Number';
+      } else {
+        const studentId = data['accounts_profile']['student_id'];
+        return studentId ? studentId : 'Student ID';
+      }
+    };
+
+    const getInputName = () => {
+      return !professionalStatus.includes('Intern') &&
+        !professionalStatus.includes('Student')
+        ? 'registrationNumber'
+        : 'studentId';
+    };
+
+    const getError = () => {
+      if (errors.registrationNumber || errors.studentId) {
+        return 'Invalid ID Number';
+      }
+    };
+
+    const placeholderText = renderInputPlaceholder();
+
+    return (
+      <div>
+        <label htmlFor='professionalIdInput' className='text-red-400'>
+          {getError()}
+        </label>
+        <input
+          id='professionalIdInput'
+          name='professionalIdInput'
+          type='text'
+          placeholder={placeholderText}
+          className={`px-2 py-2 w-full focus:outline-none bg-inherit border-b-2 border-[#A29E95] ${
+            (errors.registrationNumber || errors.studentId) &&
+            'border-b-red-400'
+          }`}
+          {...register(getInputName(), { minLength: 1, maxLength: 6 })}
+        />
+      </div>
+    );
+  };
 
   const saveUserData = async newData => {
-    api
+    await api
       .patch(`/api/accounts/all_accounts/${data.id}/`, {
         email: newData.user || userData.email,
         ['is_new_user']: false,
         ['phone_number']: newData.phoneNumber || data['phone_number'],
         ['accounts_profile']: {
-          gender: newData.gender || data['accounts_profile']['gender'],
+          gender: gender || data['accounts_profile']['gender'],
           ['professional_status']:
             professionalStatus ||
             data['accounts_profile']['professional_status'],
-          ['registration_number']:
-            newData.registrationNumber ||
-            data['accounts_profile']['registration_number'],
-          ['student_id']:
-            newData.studentId || data['accounts_profile']['student_id'],
+          ...(newData.registrationNumber && {
+            ['registration_number']: newData.registrationNumber,
+          }),
+          ...(newData.studentId && { ['student_id']: newData.studentId }),
         },
       })
       .then(() => {
-        alert('Success');
+        alert('Profile Updated Successfully');
+        clearErrors();
         reset();
       })
-      .catch(() => alert('Failed to update profile'));
+      .catch(() => {
+        alert('Failed to update profile');
+      });
   };
   return (
     <Layout>
@@ -104,24 +153,40 @@ const Profile = () => {
             })}
           >
             <input
-              type='text'
+              type='email'
+              name='email'
+              id='email'
               className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
               placeholder={data ? `${data.email}` : 'Email'}
-              {...register('user')}
+              {...register('user', {
+                pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+              })}
             />
-            <input
-              type='text'
-              className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
-              placeholder={
-                data && !data['phone_number'] == ''
-                  ? data['phone_number']
-                  : 'Phone Number'
-              }
-              {...register('phoneNumber')}
-            />
+            <div className='flex flex-col'>
+              {errors.phoneNumber && (
+                <label htmlFor='professionalIdInput' className='text-red-400'>
+                  Invalid Phone Number
+                </label>
+              )}
+              <input
+                type='text'
+                id='phoneNumber'
+                name='phoneNumber'
+                className={`px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95] ${
+                  errors.phoneNumber && 'border-b-red-400'
+                }`}
+                placeholder={
+                  data && !data['phone_number'] == ''
+                    ? data['phone_number']
+                    : 'Phone Number'
+                }
+                {...register('phoneNumber', { pattern: /^(0|\\+233)\\d{9}$/ })}
+              />
+            </div>
             <select
               className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
-              {...register('gender')}
+              value={gender}
+              onChange={e => setGender(e.target.value)}
             >
               <option value=''>Select gender</option>
               <option value='Male'>Male</option>
@@ -132,45 +197,17 @@ const Profile = () => {
               id=''
               className='bg-inherit border-b-2 border-[#A29E95] px-2 py-2 focus:outline-none'
               value={professionalStatus}
-              onChange={e => {
-                setRole(e.target.value);
-                setProfessionalStatus(e.target.value);
-              }}
+              onChange={e => setProfessionalStatus(e.target.value)}
             >
               <option value=''>Select your role</option>
-              <option value='Student Intern'>Pharmacy Student</option>
+              <option value='Pharmacy Student'>Pharmacy Student</option>
               <option value='Intern Pharmacist'>Intern Pharmacist</option>
               <option value='Pharmacist (B. Pharm)'>
                 Pharmacist (B. Pharm)
               </option>
               <option value='Pharmacist (Pharm D)'>Pharmacist (Pharm D)</option>
             </select>
-            {professionalStatus.includes('Pharmacist') &&
-              !professionalStatus.includes('Intern') && (
-                <input
-                  type='text'
-                  className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95] '
-                  placeholder={
-                    data &&
-                    !data['accounts_profile']['registration_number'] == ''
-                      ? data['accounts_profile']['registration_number']
-                      : 'Registration Number'
-                  }
-                  {...register('registrationNumber')}
-                />
-              )}
-            {professionalStatus.includes('Intern') && (
-              <input
-                type='text'
-                className='px-2 py-2 focus:outline-none bg-inherit border-b-2 border-[#A29E95]'
-                placeholder={
-                  data && !data['accounts_profile']['student_id'] == ''
-                    ? data['accounts_profile']['student_id']
-                    : 'Student ID'
-                }
-                {...register('studentId')}
-              />
-            )}
+            {data && <ProfessionalIDInput />}
             <div>
               <div
                 className='flex flex-row mb-2 items-center gap-2 text-[#0146E9] cursor-pointer'
