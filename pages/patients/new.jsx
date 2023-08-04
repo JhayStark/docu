@@ -41,11 +41,11 @@ const New = () => {
               phone_number: data.phoneNumber,
             })
             .then(() => {
-              alert('Created Succesfully ');
+              alert('Patient created Succesfully ');
               router.push('/patients');
             })
             .catch(err => {
-              alert('Network error try again');
+              alert('Failed to create patient, please try again');
             });
         })}
       >

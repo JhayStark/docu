@@ -33,32 +33,38 @@ const EmployerModal = ({ setEmployerModal }) => {
                 .post('/api/accounts/employers/', {
                   location: data.location,
                   category: data.category,
-                  place_of_work: data.placeOfWork,
+                  ['place_of_work']: data.placeOfWork,
                 })
                 .then(res => {
-                  alert('success');
+                  alert('Added employer successfully');
                   reset();
                 })
-                .catch(error => console.error(error))
+                .catch(() => alert('Failed to add employer'))
           )}
         >
           <input
             type='text'
             placeholder='Employer Name'
-            className='py-4 text-lg border-b-[1px] px-2 rounded-md focus:outline-none '
-            {...register('placeOfWork')}
+            className={`py-4 text-lg border-b-[1px] px-2 rounded-md focus:outline-none ${
+              errors.placeOfWork && 'border-b-red-400'
+            }`}
+            {...register('placeOfWork', { required: true })}
           />
           <input
             type='text'
             placeholder='Employer Location'
-            className='px-2 py-4 text-lg rounded-md border-b-[1px] focus:outline-none'
-            {...register('location')}
+            className={`py-4 text-lg border-b-[1px] px-2 rounded-md focus:outline-none ${
+              errors.location && 'border-b-red-400'
+            }`}
+            {...register('location', { required: true })}
           />
           <input
             type='text'
             placeholder='Employer Category'
-            className='px-2 py-4 text-lg rounded-md border-b-[1px] focus:outline-none'
-            {...register('category')}
+            className={`py-4 text-lg border-b-[1px] px-2 rounded-md focus:outline-none ${
+              errors.category && 'border-b-red-400'
+            }`}
+            {...register('category', { required: true })}
           />
 
           <button
