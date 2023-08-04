@@ -46,14 +46,27 @@ const PatientDetails = () => {
         </Link>
       </div>
       <div className='grid grid-cols-1 gap-3 pt-2 pb-5 md:grid-cols-2'>
-        {data?.map(intervention => (
-          <InterventionMainCard
-            key={intervention.id}
-            condition={intervention.pharmaceutical_details}
-            id={intervention.id}
-            name={intervention.pharmaceutical_care}
-          />
-        ))}
+        {data && data.length > 0
+          ? data?.map(intervention => (
+              <InterventionMainCard
+                key={intervention.id}
+                condition={intervention.pharmaceutical_details}
+                id={intervention.id}
+                name={intervention.pharmaceutical_care}
+              />
+            ))
+          : !isLoading && (
+              <div className='h-[80vh]  md:col-span-2 flex flex-col justify-center items-center'>
+                <div>
+                  <p className='mb-3 text-xl text-center'>
+                    No Interventions created
+                  </p>
+                  <p className='text-sm text-center text-gray-400 '>
+                    + Add Intervention
+                  </p>
+                </div>
+              </div>
+            )}
       </div>
     </Layout>
   );

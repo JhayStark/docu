@@ -40,16 +40,29 @@ const Index = () => {
         />
       </div>
       <div className='grid grid-cols-1 gap-3 py-5 md:grid-cols-2'>
-        {data?.map(patient => (
-          <PatientCard
-            key={patient.id}
-            age={patient.age}
-            id={patient.id}
-            name={`${patient.first_name} ${patient.last_name}`}
-            gender={patient.gender}
-            phoneNumber={patient.phone_number}
-          />
-        ))}
+        {data && data.length > 0
+          ? data?.map(patient => (
+              <PatientCard
+                key={patient.id}
+                age={patient.age}
+                id={patient.id}
+                name={`${patient.first_name} ${patient.last_name}`}
+                gender={patient.gender}
+                phoneNumber={patient.phone_number}
+              />
+            ))
+          : !isLoading && (
+              <div className='h-[80vh] md:col-span-2 flex flex-col justify-center items-center'>
+                <div>
+                  <p className='mb-3 text-xl text-center'>
+                    No Patients created
+                  </p>
+                  <p className='text-sm text-center text-gray-400'>
+                    + Add Patient
+                  </p>
+                </div>
+              </div>
+            )}
       </div>
     </Layout>
   );
