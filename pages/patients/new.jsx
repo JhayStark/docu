@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 
 const New = () => {
   const router = useRouter();
-  const [error, setError] = useState('');
   const defaultValues = {
     firstName: '',
     lastName: '',
@@ -27,18 +26,19 @@ const New = () => {
 
   return (
     <Layout>
+      <p className='text-xl font-medium '>Add New Patient</p>
       <form
         className='flex flex-col gap-3 pt-8'
         onSubmit={handleSubmit(async data => {
           await api
             .post('/api/interventions/all_patients/', {
-              first_name: data.firstName,
-              last_name: data.lastName,
+              ['first_name']: data.firstName,
+              ['last_name']: data.lastName,
               age: data.age,
               gender: data.gender,
               weight: data.weight,
-              further_details: data.furtherDetails,
-              phone_number: data.phoneNumber,
+              ['further_details']: data.furtherDetails,
+              ['phone_number']: data.phoneNumber,
             })
             .then(() => {
               alert('Patient created Succesfully ');
@@ -54,9 +54,13 @@ const New = () => {
             type='text'
             id='firstName'
             name='firstName'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
-            placeholder='First Name'
-            {...register('firstName', { required: true })}
+            className={`px-5 py-3 focus:outline-none  border-b-[1px] ${
+              errors.firstName && 'placeholder:text-red-300 border-b-red-400'
+            }`}
+            placeholder={
+              errors.firstName ? errors.firstName.message : 'First Name'
+            }
+            {...register('firstName', { required: 'Please enter first name' })}
           />
         </div>
         <div className='flex flex-col gap-2'>
@@ -64,9 +68,13 @@ const New = () => {
             type='text'
             id='lastName'
             name='lastName'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
-            placeholder='Last Name'
-            {...register('lastName', { required: true })}
+            className={`px-5 py-3 focus:outline-none  border-b-[1px] ${
+              errors.lastName && 'placeholder:text-red-300 border-b-red-400'
+            }`}
+            placeholder={
+              errors.lastName ? errors.lastName.message : 'Last Name'
+            }
+            {...register('lastName', { required: 'Please enter last name' })}
           />
         </div>
         <div className='flex flex-col gap-2'>
@@ -74,9 +82,11 @@ const New = () => {
             type='text'
             id='age'
             name='age'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
-            placeholder='Age'
-            {...register('age', { required: true })}
+            className={`px-5 py-3 focus:outline-none  border-b-[1px] ${
+              errors.age && 'placeholder:text-red-300 border-b-red-400'
+            }`}
+            placeholder={errors.age ? errors.age.message : 'Age'}
+            {...register('age', { required: 'Please enter age' })}
           />
         </div>
         <div className='flex flex-col gap-2'>
@@ -84,10 +94,14 @@ const New = () => {
             type='text'
             id='gender'
             name='gender'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
-            {...register('gender', { required: true })}
+            className={`px-5 py-3 focus:outline-none  border-b-[1px] ${
+              errors.gender && 'placeholder:text-red-300 border-b-red-400'
+            }`}
+            {...register('gender', { required: 'Please enter gender' })}
           >
-            <option value=''>Gender</option>
+            <option value=''>
+              {errors.gender ? errors.gender.message : 'Select Gender'}
+            </option>
             <option value='Male'>Male</option>
             <option value='Female'>Female</option>
           </select>
@@ -97,9 +111,13 @@ const New = () => {
             type='text'
             id='weight'
             name='weight'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
-            placeholder='Weight in kilograms'
-            {...register('weight', { required: true })}
+            className={`px-5 py-3 focus:outline-none  border-b-[1px] ${
+              errors.weight && 'placeholder:text-red-300 border-b-red-400'
+            }`}
+            placeholder={
+              errors.weight ? errors.weight.message : 'Weight in kilograms'
+            }
+            {...register('weight', { required: 'Please enter weight' })}
           />
         </div>
         <div className='flex flex-col gap-2'>
@@ -107,9 +125,15 @@ const New = () => {
             type='text'
             id='phoneNumber'
             name='phoneNumber'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
-            placeholder='024000000'
-            {...register('phoneNumber', { required: true })}
+            className={`px-5 py-3 focus:outline-none  border-b-[1px] ${
+              errors.phoneNumber && 'placeholder:text-red-300 border-b-red-400'
+            }`}
+            placeholder={
+              errors.phoneNumber ? errors.phoneNumber.message : '0200000000'
+            }
+            {...register('phoneNumber', {
+              required: 'Please enter phone number',
+            })}
           />
         </div>
         <div className='flex flex-col gap-2'>
@@ -118,9 +142,9 @@ const New = () => {
             id='furtherDetails'
             cols='30'
             rows='10'
-            className='w-full h-36 bg-[#F0F0F0] px-5 py-2'
+            className='w-full h-36 border-[1px] px-5 py-2'
             placeholder='Provide more details'
-            {...register('furtherDetails', { required: false })}
+            {...register('furtherDetails')}
           ></textarea>
         </div>
 

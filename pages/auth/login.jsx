@@ -56,32 +56,26 @@ const Login = () => {
               <h1 className='text-2xl font-semibold text-center text-gray-700'>
                 Login Existing Account
               </h1>
-              {errors.email && (
-                <p role='alert' className='text-xs text-red-500'>
-                  Enter valid email address
-                </p>
-              )}
+
               <input
                 autoComplete='none'
                 type='text'
-                placeholder='Enter email'
+                placeholder={errors.email ? 'Enter valid email' : 'Enter email'}
                 className={`p-2 bg-transparent border-b-2 outline-none w-full placeholder:text-slate-600 ${
                   errors.email && `placeholder:text-red-500 border-red-500`
                 }`}
                 {...register('email', {
-                  required: true,
+                  required: 'Enter valid email',
                   pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                 })}
               />
-              {errors.email && (
-                <p role='alert' className='text-xs text-red-500'>
-                  Enter valid password
-                </p>
-              )}
+
               <input
                 autoComplete='none'
                 type='password'
-                placeholder='Password'
+                placeholder={
+                  errors.password ? errors.password.message : 'Enter password'
+                }
                 className={`p-2 bg-transparent border-b-2 outline-none w-full placeholder:text-slate-600 ${
                   errors.password && `placeholder:text-red-500 border-red-500`
                 }`}

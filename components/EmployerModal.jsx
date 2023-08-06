@@ -45,7 +45,7 @@ const EmployerModal = ({ setEmployerModal }) => {
           <input
             type='text'
             placeholder='Employer Name'
-            className={`py-4 text-lg border-b-[1px] px-2 rounded-md focus:outline-none ${
+            className={`py-4 text-lg border-b-[1px] px-2  focus:outline-none ${
               errors.placeOfWork && 'border-b-red-400'
             }`}
             {...register('placeOfWork', { required: true })}
@@ -53,7 +53,7 @@ const EmployerModal = ({ setEmployerModal }) => {
           <input
             type='text'
             placeholder='Employer Location'
-            className={`py-4 text-lg border-b-[1px] px-2 rounded-md focus:outline-none ${
+            className={`py-4 text-lg border-b-[1px] px-2  focus:outline-none ${
               errors.location && 'border-b-red-400'
             }`}
             {...register('location', { required: true })}
@@ -61,7 +61,7 @@ const EmployerModal = ({ setEmployerModal }) => {
           <input
             type='text'
             placeholder='Employer Category'
-            className={`py-4 text-lg border-b-[1px] px-2 rounded-md focus:outline-none ${
+            className={`py-4 text-lg border-b-[1px] px-2  focus:outline-none ${
               errors.category && 'border-b-red-400'
             }`}
             {...register('category', { required: true })}

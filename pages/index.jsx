@@ -130,10 +130,10 @@ const Index = () => {
           <h2 className='text-lg md:text-2xl'>Hi {`${userData.firstName}`}</h2>
           <h1 className='text-2xl font-bold md:text-3xl'></h1>
         </div>
-        <Link href='/patients/new'>
+        <Link href='/interventions/new'>
           <div className='flex flex-row md:text-2xl items-center gap-2 text-[#0146E9] hover:opacity-70'>
             <AddIntervention />
-            <p>Add Patient</p>
+            <p>Add Intervention</p>
           </div>
         </Link>
       </section>

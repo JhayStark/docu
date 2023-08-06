@@ -129,11 +129,11 @@ const New = () => {
 
   const handleDiagnosisChange = e => {
     setDiagnosis(e.target.value);
-    console.log(diagnosis);
   };
 
   return (
     <Layout>
+      <p className='text-xl font-medium '>Add New Intervention</p>
       <form
         className='flex flex-col gap-3 pt-8'
         onSubmit={handleSubmit(async data => {
@@ -164,7 +164,7 @@ const New = () => {
               type='text'
               id='patientName'
               name='patientName'
-              className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+              className='px-5 py-3 focus:outline-none  border-b-[1px]'
               placeholder={
                 patient && `${patient['first_name']} ${patient['last_name']}`
               }
@@ -176,7 +176,7 @@ const New = () => {
             type='text'
             id='interventionLocation'
             name='interventionLocation'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            className='px-5 py-3 focus:outline-none  border-b-[1px] bg-inherit'
             placeholder='Intervention Location'
             {...register('interventionLocation', { required: true })}
           >
@@ -192,7 +192,7 @@ const New = () => {
           <select
             id='interventionDiagnosis'
             name='interventionDiagnosis'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            className='px-5 py-3 focus:outline-none  border-b-[1px] bg-inherit'
             value={diagnosis}
             onChange={e => {
               handleDiagnosisChange(e);
@@ -210,7 +210,7 @@ const New = () => {
           <select
             id='interventionReason'
             name='interventionReason'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            className='px-5 py-3 focus:outline-none  border-b-[1px] bg-inherit'
             {...register('interventionReason', { required: true })}
           >
             <option value=''>Select a reason</option>
@@ -225,7 +225,7 @@ const New = () => {
           <select
             id='interventionSolution'
             name='interventionSolution'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            className='px-5 py-3 focus:outline-none  border-b-[1px] bg-inherit'
             {...register('interventionSolution', { required: true })}
           >
             <option value=''>Select a solution</option>
@@ -241,7 +241,7 @@ const New = () => {
             type='text'
             id='medicationInvolved'
             name='medicationInvolved'
-            className='px-5 py-3 focus:outline-none rounded-md bg-[#F0F0F0]'
+            className='px-5 py-3 focus:outline-none  border-b-[1px]'
             placeholder='Medication Involved'
             {...register('medicationInvolved', { required: false })}
           />
@@ -252,7 +252,7 @@ const New = () => {
             id='moreDetails'
             cols='30'
             rows='10'
-            className='w-full h-36 bg-[#F0F0F0] px-5 py-2'
+            className='w-full h-36 border-[1px] px-5 py-2'
             placeholder='Provide more details'
             {...register('moreDetails', { required: false })}
           ></textarea>

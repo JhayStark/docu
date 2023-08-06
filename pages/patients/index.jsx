@@ -34,7 +34,7 @@ const Index = () => {
         <input
           type='text'
           placeholder='Search patient'
-          className='px-2 w-[50%] lg:w-[30%] border-[1px] py-1  rounded-md focus:outline-none'
+          className='px-2 w-[50%] lg:w-[30%] border-b-[1px] py-1  text-right focus:outline-none'
           onChange={e => setPatientSearchInput(e.target.value)}
           value={patientSearchInput}
         />
