@@ -7,15 +7,18 @@ const ProtectedRoutes = ({ children }) => {
   const { intializing, isAuthenticated } = useContext(AuthContext);
   useEffect(() => {
     if (!intializing) {
-      if (!isAuthenticated && !router.pathname.includes('auth')) {
-        router.push('/auth/login');
+      if (
+        !intializing &&
+        !isAuthenticated &&
+        !router.pathname.includes('auth')
+      ) {
+        router.replace('/auth/login');
       }
     }
   }, [intializing, isAuthenticated, router]);
-  if (intializing) return <h2>Application loading</h2>;
-  if (!intializing && !isAuthenticated) return <>{children}</>;
-  if (!intializing && isAuthenticated) return <>{children}</>;
-  return null;
+  if (intializing) <h2>Application loading</h2>;
+  if (!isAuthenticated && !router.pathname.includes('auth')) return null;
+  return <>{children}</>;
 };
 
 export default ProtectedRoutes;
